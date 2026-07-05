@@ -94,6 +94,22 @@ After receiving the Reviewer Configuration Card from field_analyst_agent, adjust
 - Focus: Research question appropriateness, data collection strategy (interview/observation/document), sampling logic (theoretical sampling/purposive sampling), data analysis method (grounded theory/thematic analysis/narrative analysis), trustworthiness
 - Common issues: Insufficient researcher reflexivity, missing member checking, theoretical saturation not achieved
 
+#### Qualitative sub-discipline refinements (social-science-track Stage 7c)
+Within the qualitative paradigm, different traditions have distinct quality emphases — apply the refinement matching the paper's actual method:
+
+| Qualitative tradition | Reviewer should additionally check |
+|---|---|
+| Ethnography / participant observation | Duration and depth of fieldwork (not weeks); positionality statement; thick description; how access + exit were handled; researcher's effect on the site |
+| Grounded theory | Straussian (axial coding + conditional matrix) vs constructivist (Charmaz) declared and followed consistently; memoing documented; theoretical sampling logic; saturation evidence |
+| Discourse / content analysis | Inter-coder reliability (Krippendorff's α ≥ 0.70) or, for CDA, reflexivity on the analyst's interpretive standpoint; corpus construction + unit of analysis; negative cases |
+| Interview / phenomenology | Interview guide + pilot reported; bracketing (phenomenology) or reflexivity (interpretive) addressed; saturation reached before analysis closed |
+| Narrative / life history | Narrative coherence vs fragmentation engaged (not smoothed); relationship between narrator and researcher; ethics of representation |
+
+> These refinements are **additions** to the trustworthiness criteria (credibility / transferability / dependability / confirmability), not replacements. A paper using grounded theory must satisfy BOTH the general qualitative criteria AND the grounded-theory-specific items.
+
+#### Quantitative causal-inference refinements (social-science-track Stage 7c)
+For quantitative papers using causal-inference designs (DiD / IV / RDD / ITS), the Methodological Rigor score hinges on the **identifying assumption** — see `references/statistical_reporting_standards.md` §2.8 for the per-design checklist. A sophisticated estimator with an undefended or untested identifying assumption is a Weak (<60) rigor score regardless of technique.
+
 ### Mixed Methods
 - Focus: Mixed design type (convergent/explanatory sequential/exploratory sequential), integration point of quantitative and qualitative, priority and timing, meta-inference quality
 - Common issues: Two methods merely "side by side" rather than truly integrated

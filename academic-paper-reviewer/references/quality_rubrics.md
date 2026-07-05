@@ -49,13 +49,21 @@ All dimensions scored 0-100. Final weighted score determines editorial decision.
 
 ## Dimension 3: Evidence Sufficiency (Weight: 25%)
 
-| Score Range | Descriptor | Behavioral Indicators |
-|------------|------------|----------------------|
-| 90-100 | Exceptional | >40 sources, 80%+ peer-reviewed, multi-method triangulation, primary + secondary data, all claims well-supported, counter-evidence acknowledged |
-| 75-89 | Strong | 25-40 sources, 70%+ peer-reviewed, adequate evidence for main claims, some triangulation |
-| 60-74 | Adequate | 15-25 sources, 60%+ peer-reviewed, key claims supported but some gaps, limited triangulation |
-| 45-59 | Weak | <15 sources OR <50% peer-reviewed, several unsupported claims, no triangulation |
-| < 45 | Insufficient | Severely under-sourced, major claims unsupported, relies heavily on grey literature or anecdotal evidence |
+> **Discipline-conditional (social-science-track Stage 7b).** The original indicators baked in quantitative source-count thresholds ("80%+ peer-reviewed") as a universal standard, which conflicts with interpretive/humanities work where 8-10 canonical primary sources can be exemplary. Select the indicator column by the paper's paradigm (and `domain_evidence_profile` when set); never apply the quantitative column to a qualitative/ethnographic paper or vice versa.
+
+| Score Range | Descriptor | Quantitative / empirical (default) — Behavioral Indicators | Qualitative / interpretive / humanities — Behavioral Indicators |
+|------------|------------|-----------------------------------------------------------|------------------------------------------------------------------|
+| 90-100 | Exceptional | >40 sources, 80%+ peer-reviewed, multi-method triangulation, primary + secondary data, all claims well-supported, counter-evidence acknowledged | Deep grounding in canonical/primary sources appropriate to the field; thick triangulation across data types (fieldnotes + interviews + artifacts + archival); every interpretive claim traceable to data; negative cases engaged; recency not penalized where the field values canonical texts |
+| 75-89 | Strong | 25-40 sources, 70%+ peer-reviewed, adequate evidence for main claims, some triangulation | Solid primary-source grounding; most claims traceable; meaningful triangulation; some engagement with disconfirming cases |
+| 60-74 | Adequate | 15-25 sources, 60%+ peer-reviewed, key claims supported but some gaps, limited triangulation | Sufficient grounding but uneven depth; some interpretive claims under-supported; limited triangulation |
+| 45-59 | Weak | <15 sources OR <50% peer-reviewed, several unsupported claims, no triangulation | Thin primary-source engagement; several interpretive leaps not anchored in data; no triangulation |
+| < 45 | Insufficient | Severely under-sourced, major claims unsupported, relies heavily on grey literature or anecdotal evidence | Severely under-grounded; interpretations float free of primary sources; no methodological traceability |
+
+**Reviewer guidance for column selection:**
+- Default to the quantitative column for papers using RCT, quasi-experiment, survey, causal-inference (DiD/IV/RDD), or meta-analytic designs.
+- Use the qualitative column for papers using ethnography, interviews, grounded theory, narrative, phenomenology, discourse analysis, or archival/textual analysis.
+- For mixed-methods papers, apply each column to the corresponding strand and weight by the strand's role in the argument; report both if they diverge materially.
+- The `domain_evidence_profile` (`social_science_qualitative`, `social_science_quantitative`, `humanities_interpretive`, `communication_mixed`) is a strong hint but not a sole determinant — the actual data/method in the paper governs.
 
 ## Dimension 4: Argument Coherence (Weight: 15%)
 
