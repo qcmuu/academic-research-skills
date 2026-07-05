@@ -27,7 +27,7 @@
 |---|---|---|
 | 0 | Branch + config hub + this log | ✅ done |
 | 1 | Domain evidence profile refinement | ✅ done |
-| 2 | Reference content (journals, methods, EQUATOR, theory) | ⏳ pending |
+| 2 | Reference content (journals, methods, EQUATOR, theory) | ✅ done |
 | 3 | Database search protocols (SSRN/JSTOR/WoS/Scopus) | ⏳ pending |
 | 4 | Citation formats (APSA / Harvard / GB/T 7714) | ⏳ pending |
 | 5 | Bias tools (MMAT/CASP/JBI/CERQual) + qualitative synthesis | ⏳ pending |
@@ -49,3 +49,10 @@ Format: `[STAGE] [NEW|EDIT] path — what changed`.
 - `[EDIT] academic-paper/agents/intake_agent.md` Step 12 — choice menu 4→7 + social-science default-suggestion guidance.
 - `[EDIT] academic-paper/agents/literature_strategist_agent.md` — profile→discipline map (7 rows); resolution block "4 enum"→"7 enum"; pseudocode comment; decision-tree admit-path annotations; corpus-ratio loosen prose — all three new profiles covered.
 - **Verified:** `python scripts/check_domain_evidence_profile.py` → OK; `pytest scripts/test_check_domain_evidence_profile.py` → 24 passed.
+
+### Stage 2 — Reference content expansion (pure overlay, zero coupling)
+- `[EDIT] academic-paper-reviewer/references/top_journals_by_field.md` — expanded Sociology + Political Science; added Anthropology, Economics, Communication/Journalism sections.
+- `[EDIT] deep-research/references/methodology_patterns.md` — added Pattern 11 (Ethnography), 12 (Grounded Theory), 13 (Action Research), 14 (Discourse/Content Analysis), 15 (QCA); extended decision tree.
+- `[EDIT] deep-research/references/equator_reporting_guidelines.md` — added SRQR (5a), ENTREQ (5b), CHEERS 2022 (5c) condensed checklists.
+- `[EDIT] deep-research/agents/research_architect_agent.md` — expanded Reporting Standards table (SRQR/ENTREQ/CHEERS/GRAMMS); added §9 Theoretical Framework Selection (10 candidate perspectives + coherence rule).
+- **Verified:** `check_domain_evidence_profile.py` OK; `check_v3_6_7_pattern_protection.py` OK (research_architect not a pattern-protected agent; edits are additive).

@@ -73,15 +73,84 @@ This document is used by `field_analyst_agent` and `eic_agent` as a reference fo
 | *American Journal of Sociology* | U Chicago Press | 4-6 | Balances theory and empirical work |
 | *Annual Review of Sociology* | Annual Reviews | 7-10 | High-quality reviews |
 | *British Journal of Sociology* | Wiley | 3-5 | Critical theory, European perspectives |
+| *Sociological Theory* | SAGE (ASA) | 3-5 | Theory contributions; conceptual rigor |
+| *Social Forces* | Oxford | 3-5 | Empirical + theoretical; broad sociology |
+| *European Sociological Review* | Oxford | 3-5 | Comparative, quantitative European sociology |
+| *Sociological Methodology* | SAGE (ASA) | 3-5 | Methods contributions |
+| *Theory and Society* | Springer | 2-4 | Theory-driven, critical/interpretive |
+| *Ethnography* | SAGE | 2-4 | Ethnographic and fieldwork-based work |
+
+### Anthropology
+| Journal | Publisher | Impact Factor Range | Typical Review Preferences |
+|---------|----------|-------------------|---------------------------|
+| *Current Anthropology* | U Chicago Press | 3-5 | Broad, interdisciplinary anthropology |
+| *American Anthropologist* | Wiley (AAA) | 2-4 | Flagship U.S. anthropology, all subfields |
+| *Journal of the Royal Anthropological Institute* | Wiley | 2-3 | British social/cultural anthropology tradition |
+| *Annual Review of Anthropology* | Annual Reviews | 5-7 | High-quality reviews |
+| *American Ethnologist* | Wiley (AAA) | 2-4 | Cultural anthropology, ethnographic theory |
+| *Cultural Anthropology* | Duke / Wiley | 1-3 | Critical, theoretically adventurous cultural anthropology |
 
 ### Political Science / Public Policy
 | Journal | Publisher | Impact Factor Range | Typical Review Preferences |
 |---------|----------|-------------------|---------------------------|
 | *American Political Science Review* | Cambridge | 5-7 | Top political science journal |
+| *American Journal of Political Science* | Wiley (MPSA) | 5-7 | Top methodological/empirical political science |
+| *Journal of Politics* | Cambridge (MPSA) | 3-5 | Empirical political science, formal + statistical |
+| *World Politics* | Cambridge | 4-6 | Comparative, IR, qualitative + quantitative |
+| *Comparative Political Studies* | SAGE | 3-5 | Comparative politics, mixed methods |
+| *International Organization* | Cambridge | 4-6 | IR theory, political economy |
+| *Perspectives on Politics* | Cambridge (APS) | 3-5 | Broad, essayistic, accessible political science |
+| *Journal of Conflict Resolution* | SAGE | 2-4 | Conflict, IR, quantitative |
 | *Journal of Policy Analysis and Management* | Wiley | 3-5 | Policy analysis, causal inference |
 | *Public Administration Review* | Wiley | 5-8 | Public administration, governance |
 | *Policy Sciences* | Springer | 3-5 | Policy process theory |
 | *Journal of Public Policy* | Cambridge | 3-5 | Comparative public policy |
+| *Governance* | Wiley | 3-5 | Public administration, institutional theory |
+| *Journal of European Public Policy* | Taylor & Francis | 4-6 | European public policy, comparative |
+
+### Economics
+| Journal | Publisher | Impact Factor Range | Typical Review Preferences |
+|---------|----------|-------------------|---------------------------|
+| *American Economic Review* | AEA | 5-7 | Top economics journal, all fields |
+| *Quarterly Journal of Economics* | Oxford | 8-11 | Top-field, applied micro, labor, development |
+| *Journal of Political Economy* | U Chicago Press | 5-7 | Theory + applied, top-tier |
+| *Econometrica* | Econometric Society | 5-7 | Econometric theory + structural empirical |
+| *Review of Economic Studies* | Oxford | 4-6 | Theory + applied, top-tier |
+| *Econometrica (Quantitative Economics sibling)* | Econometric Society | — | Applied quantitative economics |
+| *Journal of Economic Literature* | AEA | 8-12 | Survey/review articles only |
+| *Journal of Economic Perspectives* | AEA | 4-6 | Accessible surveys, policy-relevant |
+| *Review of Economics and Statistics* | MIT Press | 4-6 | Applied empirical economics |
+| *Journal of Monetary Economics* | Elsevier | 2-4 | Macro, monetary |
+| *Journal of Public Economics* | Elsevier | 2-4 | Public finance, tax, welfare |
+| *Journal of Development Economics* | Elsevier | 2-4 | Development, field experiments |
+| *Economic Journal* | Wiley (RES) | 2-4 | Broad economics, European |
+| *Journal of Finance* | Wiley (AFA) | 5-7 | Top finance journal |
+| *Journal of Financial Economics* | Elsevier | 5-7 | Corporate finance, asset pricing |
+| *Review of Financial Studies* | Oxford (SFS) | 4-6 | Theoretical + empirical finance |
+
+### Communication / Journalism
+| Journal | Publisher | Impact Factor Range | Typical Review Preferences |
+|---------|----------|-------------------|---------------------------|
+| *Journal of Communication* | Oxford | 4-6 | Flagship communication, theory + empirical |
+| *New Media & Society* | SAGE | 5-7 | Digital media, critical + empirical |
+| *Communication Research* | SAGE | 3-5 | Empirical communication research |
+| *Political Communication* | Taylor & Francis | 3-5 | Political communication, media effects |
+| *Journalism & Mass Communication Quarterly* | SAGE (AEJMC) | 2-4 | Journalism studies, mass comm |
+| *Journalism Studies* | Taylor & Francis | 2-4 | Journalism sociology, practice |
+| *Digital Journalism* | Taylor & Francis | 3-5 | Online/digital journalism |
+| *Media, Culture & Society* | SAGE | 3-5 | Critical media studies, political economy of media |
+| *Journal of Computer-Mediated Communication* | Oxford | 3-5 | CMC, social media, HCI-adjacent |
+| *Annals of the International Communication Association* | Taylor & Frances (ICA) | 4-6 | Review/synthesis, ICA flagship |
+| *Communication Theory* | Oxford (ICA) | 3-5 | Communication theory contributions |
+| *Human Communication Research* | Oxford (ICA) | 3-5 | Empirical communication, quantitative |
+
+### Psychology
+| Journal | Publisher | Impact Factor Range | Typical Review Preferences |
+|---------|----------|-------------------|---------------------------|
+| *Psychological Bulletin* | APA | 18-22 | High-quality meta-analyses |
+| *American Psychologist* | APA | 14-17 | Interdisciplinary psychology |
+| *Journal of Applied Psychology* | APA | 6-8 | Applied psychology research |
+| *Educational Psychology Review* | Springer | 8-11 | Educational psychology reviews |
 
 ### Psychology
 | Journal | Publisher | Impact Factor Range | Typical Review Preferences |

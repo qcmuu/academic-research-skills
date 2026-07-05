@@ -198,6 +198,61 @@ Common observational studies in higher education:
 
 ---
 
+## 5a. SRQR — Standards for Reporting Qualitative Research (social-science extension)
+
+**Full Name**: Standards for Reporting Qualitative Research (O'Brien et al., 2014)
+**Applicable to**: Broader qualitative designs than COREQ — ethnography, case study, narrative, grounded theory, phenomenology, action research. Use SRQR when COREQ's interview/focus-group framing is too narrow; many social-science venues prefer it.
+
+### Core Reporting Items (21 items, across 5 domains)
+
+| Domain | Items |
+|---|---|
+| **Title and abstract** | Title identifies the qualitative design; abstract summarizes the problem, method, and findings |
+| **Introduction** | Problem formulation; research question; methodological orientation (paradigm + approach) |
+| **Methods** | Qualitative approach and design; researcher characteristics and reflexivity (critical); context; sampling strategy; data sources/measurement; data collection; data processing; data analysis; techniques to enhance trustworthiness |
+| **Results/findings** | Synthesis/interpretation; links to empirical data (quotations/fieldnotes) |
+| **Discussion** | Integration with prior work; limitations; transferability; contribution |
+
+> **Reflexivity is a core required item in SRQR** — distinct from COREQ where it sits in the "research team" domain. This makes SRQR the better fit for interpretive/critical social-science work where the researcher's standpoint is analytically central.
+
+---
+
+## 5b. ENTREQ — Enhancing Transparency in Reporting the Synthesis of Qualitative Research
+
+**Full Name**: ENTREQ (Tong et al., 2012)
+**Applicable to**: Qualitative evidence synthesis (meta-synthesis, thematic synthesis, meta-ethnography). Use when the study is a synthesis OF qualitative studies, not a primary qualitative study.
+
+### Core Reporting Items (21 items, across 4 domains)
+
+| Domain | Items |
+|---|---|
+| **Introduction** | Aim and rationale for the synthesis |
+| **Methods** | Approach to synthesis (thematic / meta-ethnography / framework / narrative); searching and selection; appraisal of included studies; extraction and synthesis methods |
+| **Findings** | Categories/themes; contributions of studies to categories; synthesis output |
+| **Discussion** | Strengths, limitations, transferability of the synthesis |
+
+> ENTREQ pairs with **CERQual** (Stage 5) when assessing confidence in individual synthesis findings.
+
+---
+
+## 5c. CHEERS — Consolidated Health Economic Evaluation Reporting Standards (economic-evaluation extension)
+
+**Full Name**: CHEERS 2022
+**Applicable to**: Cost-effectiveness, cost-utility, cost-benefit analyses — common in health economics, public-policy evaluation, education economics.
+
+### Core Reporting Items (28 items, across 6 domains)
+
+| Domain | Items |
+|---|---|
+| **Title and abstract** | Identify as an economic evaluation; summarize design, population, intervention, comparator, outcome, time horizon |
+| **Introduction** | Research question; policy/practice relevance; comparator rationale |
+| **Methods** | Perspective (societal / health system / payer); time horizon; discount rate; choice of health outcome + cost measures; analytic methods (decision model type); model structure + assumptions; characterizing uncertainty; characterizing heterogeneity |
+| **Results** | Study parameters (values, ranges, sources); incremental costs/outcomes; ICER; uncertainty analysis; heterogeneity analysis |
+| **Discussion** | Findings, limitations, generalizability; implications for decision-makers |
+| **Other** | Source of funding; conflicts of interest |
+
+---
+
 ## 6. SQUIRE — Quality Improvement Study Condensed Checklist
 
 **Full Name**: Standards for QUality Improvement Reporting Excellence

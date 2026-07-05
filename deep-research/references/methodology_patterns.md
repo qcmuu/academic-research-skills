@@ -429,6 +429,157 @@ Phase 3: Outcomes
 - Recommendations for future practice/research:
 ```
 
+## Pattern 11: Ethnography / Fieldwork
+
+### When to Use
+- Understanding a culture, community, or practice from the inside over extended immersion
+- Generating theory grounded in observed everyday practice rather than testing hypotheses
+- Studying phenomena that surveys cannot capture (tacit norms, meaning-making, power in situ)
+
+### Design Template
+```
+Research Question: How do members of [community/site] practice/understand [phenomenon]?
+
+Protocol:
+1. Site selection (theoretical/purposive; access negotiation; ethics on fieldwork risk)
+2. Immersion (sustained fieldwork; participant observation; fieldnote discipline)
+3. Data collection (observation + interviews + artifacts; field journal + memoing)
+4. Iterative coding (open -> focused; constant comparison)
+5. Theoretical saturation (continue until new data add little)
+6. Member checking / respondent validation
+7. Thick description write-up + positionality statement
+
+Quality Criteria (trustworthiness):
+- Credibility (prolonged engagement, triangulation, member checking)
+- Transferability (thick description, not statistical generalization)
+- Dependability (audit trail of analytical decisions)
+- Confirmability (reflexivity; data-to-claim traceability)
+
+Reporting Standard: COREQ / SRQR (see equator_reporting_guidelines.md)
+Reflexivity: required (see shared/social_science_config.md §7)
+```
+
+## Pattern 12: Grounded Theory
+
+### When to Use
+- Developing a substantive or formal theory that emerges from data (no pre-existing theory fits)
+- Studying social processes, stages, or strategies of action
+- Researcher wants inductively derived theory, not hypothesis testing
+
+### Design Template
+```
+Research Question: What is the main concern of [actors] in [context], and how do they resolve it?
+
+Two traditions (declare which):
+- Straussian (axial coding, conditional matrix, hypothesis testing in later stages)
+- Charmaz constructivist (codes as interpretive, theory as situated; reflexive)
+
+Protocol:
+1. Theoretical sampling (sample to develop categories, not to represent a population)
+2. Simultaneous data collection + analysis (constant comparison)
+3. Coding levels: open (line-by-line) -> focused (categories) -> theoretical (core category)
+4. Memoing throughout (the bridge between data and theory)
+5. Theoretical saturation
+6. Theory integration around a core category
+
+Quality Criteria:
+- Fit, relevance, workability, modifiability (Glaser's criteria)
+- Charmaz: credibility, originality, resonance, usefulness
+- Transparency of coding decisions; negative case analysis
+
+Reporting Standard: COREQ / SRQR
+```
+
+## Pattern 13: Participatory / Action Research
+
+### When to Use
+- The research aim includes changing a practice or system, not only understanding it
+- Stakeholders are co-researchers, not subjects (CBPR, PAR)
+- Knowledge is produced with a community for a community
+
+### Design Template
+```
+Research Question: How can [stakeholders] collaboratively improve [practice/situation], and what does the process teach us?
+
+Protocol (cyclical, not linear):
+1. Relationship-building + co-design of research questions WITH stakeholders
+2. Action planning (shared decision on intervention/inquiry)
+3. Action (implementation)
+4. Observation + data collection (mixed methods; reflective journals)
+5. Reflection (collective sense-making; power-sharing)
+6. Revised planning -> next cycle
+
+Quality Criteria:
+- Authenticity of participation (ladder of participation; avoid tokenism)
+- Action outcomes (did anything change?) + knowledge outcomes
+- Reflexivity on researcher's role/power (critical)
+- Sustainability + ownership by the community
+
+Ethics: power asymmetry, consent in ongoing participation, mutual benefit;
+positionality statement mandatory.
+Reporting Standard: no single EQUATOR guideline; follow COREQ for qualitative
+components + GRAMMS if mixed methods.
+```
+
+## Pattern 14: Discourse / Content Analysis
+
+### When to Use
+- Systematic analysis of texts, media, talk, or documents as the data
+- "Content analysis" = descriptive counts/themes; "discourse analysis" = how language constructs reality/power
+- Media studies, political communication, organizational talk, policy texts
+
+### Design Template
+```
+Research Question: How is [phenomenon] represented/constructed in [corpus], and with what effects?
+
+Protocol:
+1. Corpus construction (sampling frame, inclusion criteria, unit of analysis)
+2. Codebook development (deductive from theory + inductive pilot; inter-coder reliability)
+3. Coding (human, computational, or both; report Krippendorff's alpha / Cohen's kappa)
+4. Analysis:
+   - Content analysis: frequency, co-occurrence, thematic structure
+   - Discourse/Critical discourse analysis: framing, lexical choices, power/ideology work
+5. Contextualization (production/reception context; not text in isolation)
+6. Negative cases + alternative readings
+
+Quality Criteria:
+- Reproducibility (inter-coder reliability >= 0.70; documented codebook)
+- Validity (construct + contextual; triangulation across sources)
+- Reflexivity on analyst's standpoint (especially for CDA)
+
+Reporting Standard: SRQR for qualitative arm; declare content vs discourse
+approach explicitly.
+```
+
+## Pattern 15: Qualitative Comparative Analysis (QCA)
+
+### When to Use
+- Comparing a small-to-medium N (5-50) of cases to identify configurational causal patterns
+- Outcomes explained by combinations (conjunctions) of conditions, not single variables
+- Common in comparative politics, sociology, management, policy (Boolean/set-theoretic thinking)
+
+### Design Template
+```
+Research Question: Which combinations of conditions [A, B, C, ...] are sufficient and/or necessary for [outcome]?
+
+Protocol:
+1. Case selection (theoretical + purposive; cases share outcome of interest)
+2. Calibration of conditions + outcome into sets (crisp 0/1 or fuzzy 0.0-1.0)
+3. Construct the data matrix (cases x conditions + outcome)
+4. Truth table analysis (Boolean/minimization; fuzzy AND/OR)
+5. Identify necessary conditions + sufficient configurations (solution terms)
+6. Robness checks (frequency threshold, consistency threshold; counterfactual analysis)
+
+Quality Criteria:
+- Calibration transparency (justify each threshold; calibration is theory-driven)
+- Consistency >= 0.75 (raw + solution); coverage reported (raw + unique)
+- Robustness to alternative calibration + thresholds
+- Limited diversity acknowledged (logical remainders + how treated)
+
+Reporting Standard: no EQUATOR guideline; follow Ragin/Dusa conventions;
+report truth table + solution + robustness.
+```
+
 ## Choosing the Right Pattern
 
 ```
@@ -442,7 +593,12 @@ What type of question?
 ├── "How do we compare?" → Benchmarking Study
 ├── "Which technology should we use?" → Technology Requirements Analysis
 ├── "What does the law say?" → Legal Case Analysis
-└── "What knowledge emerges from practice?" → Creative/Practice-Based Research
+├── "What knowledge emerges from practice?" → Creative/Practice-Based Research
+├── "How does a community practice/understand X from within?" → Ethnography / Fieldwork
+├── "What theory emerges inductively from this data?" → Grounded Theory
+├── "How can we collaborate to change X?" → Participatory / Action Research
+├── "How is X constructed/represented in texts/media?" → Discourse / Content Analysis
+└── "Which combinations of conditions produce X?" → Qualitative Comparative Analysis
 
 More nuanced decision:
 ├── Technology assessment related
@@ -455,6 +611,13 @@ More nuanced decision:
 │   ├── Generating knowledge through the creative process → Pattern 10 (Creative/Practice-Based Research)
 │   ├── Understanding the experience of creators → Pattern 6 (Exploratory Research)
 │   └── Analyzing creative texts/works → Pattern 5 (Content Analysis)
+├── Social-science interpretive related
+│   ├── Sustained immersion in a community/practice → Pattern 11 (Ethnography)
+│   ├── Inductive theory-building from data → Pattern 12 (Grounded Theory)
+│   ├── Collaborative change with stakeholders → Pattern 13 (Action Research)
+│   └── Systematic analysis of texts/media/talk → Pattern 14 (Discourse/Content Analysis)
+├── Social-science configurational comparison
+│   └── Small-N cases, combinations of conditions → Pattern 15 (QCA)
 └── Uncertain
     ├── New topic with scarce literature → Pattern 6 (Exploratory Research)
     ├── Complex problem requiring multiple data types → Pattern 4 (Mixed Methods)
