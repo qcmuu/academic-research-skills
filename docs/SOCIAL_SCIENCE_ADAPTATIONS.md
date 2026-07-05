@@ -28,12 +28,12 @@
 | 0 | Branch + config hub + this log | ✅ done |
 | 1 | Domain evidence profile refinement | ✅ done |
 | 2 | Reference content (journals, methods, EQUATOR, theory) | ✅ done |
-| 3 | Database search protocols (SSRN/JSTOR/WoS/Scopus) | ⏳ pending |
-| 4 | Citation formats (APSA / Harvard / GB/T 7714) | ⏳ pending |
-| 5 | Bias tools (MMAT/CASP/JBI/CERQual) + qualitative synthesis | ⏳ pending |
-| 6 | Reflexivity / positionality advisory agent | ⏳ pending |
-| 7 | Reviewer discipline calibration | ⏳ pending |
-| 8 | Chinese social-science ecology (CNKI / CSSCI) | ⏳ pending |
+| 3 | Database search protocols (SSRN/JSTOR/WoS/Scopus) | ✅ done |
+| 4 | Citation formats (APSA / Harvard / GB/T 7714) | ✅ done |
+| 5 | Bias tools (MMAT/CASP/JBI/CERQual) + qualitative synthesis | ✅ done |
+| 6 | Reflexivity / positionality advisory agent | ⏸ deferred (high-coupling; optional) |
+| 7 | Reviewer discipline calibration (7a DiD/IV/RDD + 7b Dim3 + 7c qual) | ✅ done |
+| 8 | Chinese social-science ecology (CNKI / CSSCI) | ⏸ deferred (low priority) |
 
 ## Change ledger
 
@@ -56,3 +56,33 @@ Format: `[STAGE] [NEW|EDIT] path — what changed`.
 - `[EDIT] deep-research/references/equator_reporting_guidelines.md` — added SRQR (5a), ENTREQ (5b), CHEERS 2022 (5c) condensed checklists.
 - `[EDIT] deep-research/agents/research_architect_agent.md` — expanded Reporting Standards table (SRQR/ENTREQ/CHEERS/GRAMMS); added §9 Theoretical Framework Selection (10 candidate perspectives + coherence rule).
 - **Verified:** `check_domain_evidence_profile.py` OK; `check_v3_6_7_pattern_protection.py` OK (research_architect not a pattern-protected agent; edits are additive).
+
+### Stage 3 — Database search protocols (pure overlay)
+- `[NEW] deep-research/references/social_science_database_protocols.md` — WoS SSCI, Scopus, SSRN, JSTOR, EconLit, NBER, ProQuest (SocAbs/WPSA/CommAbstracts) query syntax + per-discipline selection table.
+- `[EDIT] deep-research/agents/bibliography_agent.md` — +Step 2.0 discipline-driven database selection; default ARS layer demoted to supplementary for social sciences.
+
+### Stage 5 — Bias tools + qualitative synthesis (remove Cochrane-only tilt)
+- `[EDIT] deep-research/agents/risk_of_bias_agent.md` — description/role + +MMAT 2018 (5 categories) + CASP Qualitative (10 items) + JBI + CERQual; Step 1 decision tree rewritten for study-design→instrument routing.
+- `[EDIT] deep-research/agents/meta_analysis_agent.md` — +Qualitative Evidence Synthesis section (meta-ethnography / thematic / framework / mixed-methods); decision flowchart routes qualitative corpora to QES methods.
+
+### Stage 4 — Citation formats +3 (APSA / Harvard / GB/T 7714)
+- `[EDIT] academic-paper/references/citation_format_switcher.md` — comparison matrix +3 cols; +APSA/Harvard/GB-T-7714 per-format blocks.
+- `[NEW] academic-paper/references/gbt7714_style_guide.md` — full GB/T 7714-2015 rules (dual system, CN-vs-Western authors, doc-type tags, bilingual conventions, error table).
+- `[EDIT] academic-paper/agents/formatter_agent.md` — From→To matrix 5×5→8×8; Format-Specific Features +3 cols.
+- `[EDIT] academic-paper/SKILL.md` — frontmatter description 5→8 formats; 4 prose surfaces updated.
+- `[EDIT] academic-paper/references/mode_selection_guide.md` — +3 trigger phrases.
+
+### Stage 7 — Reviewer discipline calibration (7a + 7b + 7c)
+- `[EDIT] academic-paper-reviewer/references/statistical_reporting_standards.md` (7a) — +§2.8 causal-inference checklists: DiD (parallel-trends, staggered-timing), IV/2SLS (relevance F>10, exclusion, LATE), RDD (McCrary, CCT bandwidth, sharp/fuzzy), ITS (level+slope, autocorr).
+- `[EDIT] academic-paper-reviewer/references/quality_rubrics.md` (7b) — Dimension 3 Evidence Sufficiency split into discipline-conditional columns (quantitative default vs qualitative/interpretive); eliminates the suite's worst quant-baked-in scoring.
+- `[EDIT] academic-paper-reviewer/agents/methodology_reviewer_agent.md` (7c) — +qualitative sub-discipline refinements table (ethnography / grounded theory / discourse / interview / narrative) + quantitative causal-inference refinement.
+- `[UNCHANGED] review_criteria_framework.md` — Dimension 3 already method-neutral; no drift (issue #396 safe).
+
+### Verification
+- All 7 core CI lints green: domain-evidence, v3.6.7 pattern-protection, v3.9.2 phase-boundary, v3.10 #134 write-scope, spec-consistency, rubric-weight, 215-field-norm.
+- `pytest scripts/test_check_domain_evidence_profile.py` → 24 passed.
+- Agent classification unchanged (23 Bucket A + 16 Bucket B/C/D) — no new agent file added, so write-scope manifest + phase-boundary lint untouched.
+
+### Deferred (optional follow-up)
+- **Stage 6** — reflexivity/positionality advisory agent. High-coupling: requires bumping `BUCKET_BCD_AGENTS` 16→17 in two Python lints (`check_v3_9_2_phase_boundary.py`, `check_v3_10_134_write_scope.py`) + orchestrator dispatch prose + SKILL.md Agent Team table. The reflexivity concern is already surfaced via CASP item 6 (Stage 5) and SRQR (Stage 2), so the gap is advisory-only, not missing.
+- **Stage 8** — Chinese social-science ecology (CNKI protocol + CSSCI journal list + Chinese writing conventions). GB/T 7714 citation (Stage 4) already covers the most impactful gap; CNKI/CSSCI are additive.
