@@ -68,6 +68,29 @@ DOCUMENT TYPES: [journal articles, reports, grey literature, etc.]
 
 ### Step 2: Execute Search
 
+#### Step 2.0: Database selection (discipline-driven)
+
+Select the discovery databases from the PCR `Discipline`. The default ARS discovery layer (Semantic Scholar, OpenAlex, Crossref, arXiv) is **supplementary** for social sciences — arXiv has near-zero coverage of sociology / anthropology / communication, and Semantic Scholar under-indexes non-Anglophone and humanities-adjacent work. For social-science disciplines, lead with the discipline-appropriate primary database and note where institutional access is required.
+
+> Reference: `references/social_science_database_protocols.md` for query syntax, field tags, and per-database construction rules. See also `shared/social_science_config.md` §3 for the discipline → database map.
+
+| Discipline cluster | Primary (discovery) | Secondary |
+|---|---|---|
+| Sociology | WoS SSCI, Sociological Abstracts (ProQuest) | Scopus, JSTOR |
+| Anthropology | JSTOR, AnthroSource | WoS SSCI, Scopus |
+| Political science & public admin | WoS SSCI, Worldwide Political Science Abstracts (ProQuest) | SSRN, Scopus |
+| Economics & management | EconLit, SSRN, NBER | WoS SSCI, Scopus, RePEc |
+| Communication / journalism | WoS SSCI, Communication Abstracts (ProQuest) | Scopus, JSTOR |
+| CS / Engineering | IEEE Xplore, ACM DL, Scopus | Semantic Scholar, arXiv |
+| Medicine / Health | PubMed, MEDLINE, Cochrane | Semantic Scholar, Crossref |
+| Education | ERIC, Education Source, JSTOR | Scopus |
+| Humanities | JSTOR, Project MUSE, MLA Bibliography | Crossref |
+| General / unknown | Google Scholar, Web of Science, Scopus | Semantic Scholar |
+
+For databases with no public free API (WoS, Scopus, ProQuest, EconLit, JSTOR), construct and document the exact Boolean query string + filters for the search-strategy report; do NOT fabricate retrieved records — record "institutional-access search documented; [N] hits recorded by scholar" where the search must be run manually. Verification of any retrieved record still flows through the S2/OpenAlex/Crossref stack in Step 4.5.
+
+#### Step 2.1: Run the search
+
 - Record results per database
 - Document date of search
 - Note total hits before filtering
