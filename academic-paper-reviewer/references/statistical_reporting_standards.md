@@ -185,6 +185,58 @@ All quantitative research papers **must** report the following items. Check each
 | Reporting format | Report test statistic, *p*-value, effect size |
 | Post-hoc comparisons | After significant Kruskal-Wallis, pairwise comparisons + correction needed |
 
+### 2.8 Quasi-Experimental / Causal-Inference Designs (social-science extension)
+
+These designs are the backbone of quantitative social science (economics, political science, public policy, quantitative sociology). They are **not optional** — a paper using DiD/IV/RDD without reporting the items below should be flagged as having a weak identification strategy. Reviewer: apply these ONLY when the paper actually uses the design; do not demand them from RCTs or descriptive studies.
+
+#### Difference-in-Differences (DiD)
+
+| Check Item | Description |
+|---|---|
+| Identification assumption | Parallel-trends assumption stated AND tested (pre-period trend plot or test) |
+| Treatment/control definition | Clear definition of treated vs control units; justification of comparison-group validity |
+| Two-way fixed effects | Unit FE + time FE specified; clustering at the treatment-unit level (not individual) |
+| Event-study / leads | Pre-treatment leads reported (to test for anticipation / pre-trends); not just the DiD coefficient |
+| Staggered timing | If treatment rolls out over time, address the recent DiD literature (Goodman-Bacon decomp; callaway-Sant'Anna; Sun-Abraham) — older TWFE is now known to bias with staggered timing |
+| Placebo / falsification | Placebo treatment date or placebo outcome reported as robustness |
+| Standard errors | Cluster at the level of treatment assignment; report SE sensitivity (alternative clustering) |
+
+#### Instrumental Variables (IV / 2SLS)
+
+| Check Item | Description |
+|---|---|
+| Relevance | First-stage F-statistic reported; rule of thumb > 10 (or use weak-instrument-robust inference — Anderson-Rubin / Stock-Wright) |
+| Exclusion restriction | Argument for why the instrument affects the outcome ONLY through the endogenous regressor (cannot be tested; must be argued) |
+| Exogeneity | Argument for why the instrument is as-good-as-randomly assigned |
+| First stage reported | Full first-stage regression reported, not just the second stage |
+| Local Average Treatment Effect (LATE) | Acknowledge IV estimates the LATE for compliers, not the ATE — state the complier subpopulation |
+| Overidentification test | If multiple instruments, Sargan/Hansen J-test reported (but note its low power) |
+
+#### Regression Discontinuity (RDD)
+
+| Check Item | Description |
+|---|---|
+| Running variable + cutoff | Running/forcing variable and cutoff clearly defined; units near cutoff described |
+| Continuity of density | McCrary density test (or Cattaneo-Jansson-Ma) for manipulation/Sorting at the cutoff reported |
+| Covariate balance | Covariates continuous at the cutoff (cannot jump); reported |
+| Bandwidth selection | Optimal bandwidth method stated (Imbens-Kalyanaraman / Calonico-Cattaneo-Titiunik); results robust to bandwidth choice |
+| Polynomial order | Local-linear (default) or local-polynomial; justify choice; don't over-fit with global high-order polynomials |
+| Effect estimate | Local average treatment effect at the cutoff reported with robust (CCT) confidence intervals |
+| Sharp vs fuzzy | Sharp vs fuzzy RD stated; fuzzy RD uses RD cutoff as IV — report first stage |
+
+#### Interrupted Time Series (ITS) / Segmented Regression
+
+| Check Item | Description |
+|---|---|
+| Pre-intervention trend | Sufficient pre-intervention observations (rule of thumb ≥ 8-12) to estimate the counterfactual trend |
+| Level + slope change | Both level change (immediate) and slope change (gradual) modeled and reported |
+| Autocorrelation | Address serial autocorrelation (AR(1)/Newey-West SE; or Prais-Winsten); OLS SEs are usually wrong here |
+| Seasonality | Seasonal components modeled if data are monthly/weekly |
+| Control series | If possible, a control series (untreated comparison) reported to strengthen causal claim |
+| Sensitivity | Drop the intervention period; test for delayed effects; placebo intervention date |
+
+> **Cross-cutting rule for all causal-inference designs**: the identifying assumption is the heart of the paper. A DiD/IV/RDD paper that does not state, defend, and stress-test its identifying assumption has a weak Methodological Rigor score regardless of how sophisticated the estimator is.
+
 ---
 
 ## 3. APA 7th Edition Statistical Format Quick Reference
