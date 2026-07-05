@@ -26,7 +26,7 @@
 | Stage | Scope | Status |
 |---|---|---|
 | 0 | Branch + config hub + this log | ✅ done |
-| 1 | Domain evidence profile refinement | ⏳ pending |
+| 1 | Domain evidence profile refinement | ✅ done |
 | 2 | Reference content (journals, methods, EQUATOR, theory) | ⏳ pending |
 | 3 | Database search protocols (SSRN/JSTOR/WoS/Scopus) | ⏳ pending |
 | 4 | Citation formats (APSA / Harvard / GB/T 7714) | ⏳ pending |
@@ -42,3 +42,10 @@ Format: `[STAGE] [NEW|EDIT] path — what changed`.
 ### Stage 0
 - `[NEW] docs/SOCIAL_SCIENCE_ADAPTATIONS.md` — this file.
 - `[NEW] shared/social_science_config.md` — central config hub for downstream stages.
+
+### Stage 1 — Domain evidence profile refinement (4 → 7 ship-ready enum)
+- `[EDIT] academic-paper/references/domain_evidence_profiles.md` — table 4→7 rows: added `social_science_qualitative`, `social_science_quantitative`, `communication_mixed`; retained `general_social_science` as coarse fallback; updated carry-forward folds.
+- `[EDIT] scripts/check_domain_evidence_profile.py` — `SHIP_ENUM` 4→7; C2 error message + C3 keyword de-hardcoded from "4".
+- `[EDIT] academic-paper/agents/intake_agent.md` Step 12 — choice menu 4→7 + social-science default-suggestion guidance.
+- `[EDIT] academic-paper/agents/literature_strategist_agent.md` — profile→discipline map (7 rows); resolution block "4 enum"→"7 enum"; pseudocode comment; decision-tree admit-path annotations; corpus-ratio loosen prose — all three new profiles covered.
+- **Verified:** `python scripts/check_domain_evidence_profile.py` → OK; `pytest scripts/test_check_domain_evidence_profile.py` → 24 passed.
