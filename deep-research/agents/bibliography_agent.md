@@ -86,8 +86,11 @@ Select the discovery databases from the PCR `Discipline`. The default ARS discov
 | Education | ERIC, Education Source, JSTOR | Scopus |
 | Humanities | JSTOR, Project MUSE, MLA Bibliography | Crossref |
 | General / unknown | Google Scholar, Web of Science, Scopus | Semantic Scholar |
+| Chinese-language social science | **CNKI (scoped to CSSCI 南大核心)** | 北大核心 (PKU Core), Taiwan TSSCI / Airiti, 万方, 维普 |
 
-For databases with no public free API (WoS, Scopus, ProQuest, EconLit, JSTOR), construct and document the exact Boolean query string + filters for the search-strategy report; do NOT fabricate retrieved records — record "institutional-access search documented; [N] hits recorded by scholar" where the search must be run manually. Verification of any retrieved record still flows through the S2/OpenAlex/Crossref stack in Step 4.5.
+For databases with no public free API (WoS, Scopus, ProQuest, EconLit, JSTOR, **CNKI**), construct and document the exact Boolean query string + filters for the search-strategy report; do NOT fabricate retrieved records — record "institutional-access search documented; [N] hits recorded by scholar" where the search must be run manually. Verification of any retrieved record still flows through the S2/OpenAlex/Crossref stack in Step 4.5.
+
+> **Chinese-language caveat**: most CNKI-indexed Chinese articles lack DOIs, so the S2/OpenAlex/Crossref stack returns `unresolvable` for them — this is expected, not a fabrication signal. Mark such entries `obtained_via: cnki_institutional` so the contamination check exempts them. See `references/cnki_protocol.md` for CNKI search-strategy details (CSSCI vs 北大核心 subsetting, field syntax, citation chaining) and `references/social_science_database_protocols.md` for the Western databases.
 
 #### Step 2.1: Run the search
 

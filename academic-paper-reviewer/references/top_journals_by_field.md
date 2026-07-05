@@ -251,6 +251,58 @@ This document is used by `field_analyst_agent` and `eic_agent` as a reference fo
 | 教育心理學報 (Bulletin of Educational Psychology) | Educational Psychology | 1011-5714 | NTNU; psychological perspectives in education |
 | 測驗學刊 (Psychological Testing) | Psychometrics | 1609-4905 | Assessment and measurement |
 
+### Mainland China (CSSCI — 南大核心, social-science-track Stage 8)
+
+> CSSCI (中文社会科学引文索引, Nanjing University Core) is the gold-standard index for Chinese social-science journals (~500 journals). The venues below are CSSCI-indexed first-tier outlets in the target disciplines. For a full CSSCI list, consult the official Nanjing University CSSCI source list (updated biennially). See `deep-research/references/cnki_protocol.md` for CNKI search-strategy details.
+
+#### 社会学 / 人口学 (Sociology / Demography)
+| Journal | Notes |
+|---------|-------|
+| 社会学研究 (Sociological Studies) | Top Chinese sociology journal; CASS |
+| 社会 (Chinese Journal of Sociology) | Shanghai University; broad sociology |
+| 中国社会科学 (Social Sciences in China) | Flagship across all social sciences; CASS |
+| 社会学评论 (Sociological Review) | Methodological and theoretical sociology |
+| 人口研究 (Population Research) | Demography, population policy |
+| 青年研究 (Youth Studies) | Youth sociology |
+
+#### 政治学 / 公共管理 (Political Science / Public Administration)
+| Journal | Notes |
+|---------|-------|
+| 政治学研究 (CASS Journal of Political Science) | Political theory + Chinese politics |
+| 中国行政管理 (Chinese Public Administration) | Top public-administration journal |
+| 公共管理学报 (Journal of Public Management) | Public management, policy |
+| 公共行政评论 (Journal of Public Administration) | PA theory + practice |
+| 国际政治研究 (International Politics Quarterly) | IR, comparative politics |
+| 世界经济与政治 (World Economics and Politics) | IR + political economy |
+
+#### 新闻传播学 (Communication / Journalism)
+| Journal | Notes |
+|---------|-------|
+| 新闻与传播研究 (Journalism and Communication Research) | Top CASS communication journal |
+| 国际新闻界 (Journalism & Communication) | Renmin University; flagship communication |
+| 新闻大学 (Journalism University) | Fudan; journalism studies |
+| 现代传播 (Modern Communication) | Communication University of China; media studies |
+| 当代传播 (Contemporary Communications) | Journalism practice + theory |
+
+#### 经济学 / 管理学 (Economics / Management)
+| Journal | Notes |
+|---------|-------|
+| 经济研究 (Economic Research Journal) | Top Chinese economics journal |
+| 管理世界 (Management World) | Top management + applied economics |
+| 中国工业经济 (China Industrial Economics) | Industrial economics, firm studies |
+| 经济学（季刊）(China Economic Quarterly) | Applied economics, PKU |
+| 金融研究 (Journal of Financial Research) | Finance, monetary economics |
+| 会计研究 (Accounting Research) | Accounting |
+| 南开管理评论 (Nankai Business Review) | Strategic management, OB |
+
+#### 综合 / 跨学科 (General / Interdisciplinary)
+| Journal | Notes |
+|---------|-------|
+| 中国社会科学 (Social Sciences in China) | CASS flagship; all social-science disciplines |
+| 学术月刊 (Academic Monthly) | Humanities + social science essays |
+| 开放时代 (Open Times) | Critical social theory, interdisciplinary |
+| 社会科学战线 (Social Science Front) | Broad interdisciplinary social science |
+
 ### Asia-Pacific
 
 | Journal | Field | Publisher | Impact |
