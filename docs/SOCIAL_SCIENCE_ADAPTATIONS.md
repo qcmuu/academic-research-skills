@@ -31,9 +31,9 @@
 | 3 | Database search protocols (SSRN/JSTOR/WoS/Scopus) | ✅ done |
 | 4 | Citation formats (APSA / Harvard / GB/T 7714) | ✅ done |
 | 5 | Bias tools (MMAT/CASP/JBI/CERQual) + qualitative synthesis | ✅ done |
-| 6 | Reflexivity / positionality advisory agent | ⏸ deferred (high-coupling; optional) |
+| 6 | Reflexivity / positionality advisory agent | ✅ done |
 | 7 | Reviewer discipline calibration (7a DiD/IV/RDD + 7b Dim3 + 7c qual) | ✅ done |
-| 8 | Chinese social-science ecology (CNKI / CSSCI) | ⏸ deferred (low priority) |
+| 8 | Chinese social-science ecology (CNKI / CSSCI) | ✅ done |
 
 ## Change ledger
 
@@ -86,3 +86,25 @@ Format: `[STAGE] [NEW|EDIT] path — what changed`.
 ### Deferred (optional follow-up)
 - **Stage 6** — reflexivity/positionality advisory agent. High-coupling: requires bumping `BUCKET_BCD_AGENTS` 16→17 in two Python lints (`check_v3_9_2_phase_boundary.py`, `check_v3_10_134_write_scope.py`) + orchestrator dispatch prose + SKILL.md Agent Team table. The reflexivity concern is already surfaced via CASP item 6 (Stage 5) and SRQR (Stage 2), so the gap is advisory-only, not missing.
 - **Stage 8** — Chinese social-science ecology (CNKI protocol + CSSCI journal list + Chinese writing conventions). GB/T 7714 citation (Stage 4) already covers the most impactful gap; CNKI/CSSCI are additive.
+
+### Stage 6 — Reflexivity / positionality advisory agent (high-coupling, completed)
+- `[NEW] academic-pipeline/agents/reflexivity_agent.md` — Bucket C advisory observer; checks positionality / researcher-effect / cultural-sensitivity / power-asymmetry / member-checking; profile-gated intensity (full for qualitative, light for positivist); `measures: reflexivity_positionality`, `blocking: false`.
+- `[NEW] shared/reflexivity_rubric.md` — 5-dimension rubric operationalizing SRQR reflexivity items + CASP item 6; frontmatter `rubric_version: 1.0`.
+- `[EDIT] scripts/check_v3_9_2_phase_boundary.py` — `BUCKET_BCD_AGENTS` 16→17 (+reflexivity_agent in Bucket C); count assertion + header comment.
+- `[EDIT] scripts/check_v3_10_134_write_scope.py` — `BUCKET_BCD_AGENT_FILES` 16→17; count assertion + I1 docstring (16→17 / 39→40).
+- `[EDIT] scripts/test_check_v3_9_2_phase_boundary.py` — hardcoded 16/39 → 17/40 (3 sites).
+- `[EDIT] academic-pipeline/agents/pipeline_orchestrator_agent.md` — step-3 dispatch now invokes both observers; IRON RULE covers both; +full "Reflexivity & Positionality Observer" section mirroring the collaboration-depth one (when / how / cross-model consent / non-blocking guarantees / distinction).
+- `[EDIT] academic-pipeline/SKILL.md` — Agent Team 5→6; Mode A dispatch list; Bucket C roster; agent-file table.
+- **Verified:** phase-boundary + write-scope + spec-consistency + domain-evidence lints green (17 B/C/D); 50 related tests pass. The `check_collaboration_depth_rubric` test failure on Windows is a pre-existing path-separator issue in an untouched file (shared/ vs shared\), unrelated to this change.
+
+### Stage 8 — Chinese social-science ecology (low priority, completed)
+- `[NEW] deep-research/references/cnki_protocol.md` — CNKI search strategy: CSSCI vs 北大核心 vs CSTPCD index subsetting; field syntax (SU=/TI=/KY=); Chinese synonym expansion; citation chaining; no-DOI coverage-gap handling (`obtained_via: cnki_institutional` exemption).
+- `[EDIT] academic-paper-reviewer/references/top_journals_by_field.md` — +Mainland China (CSSCI) section: 社会学/人口学, 政治学/公管, 新闻传播学, 经济学/管理学, 综合/跨学科 first-tier CSSCI venues.
+- `[NEW] academic-paper/references/chinese_writing_conventions.md` — title/abstract/keyword norms; 一二三 section numbering (vs English 1.2.3.); 基金项目 funding format with full funder names; 作者简介 first-page footnote; 中图分类号 + 文献标识码; bilingual handling; localization-error flag table.
+- `[EDIT] deep-research/agents/bibliography_agent.md` — +Chinese-language social-science row (CNKI scoped to CSSCI) + no-DOI caveat.
+
+### Final verification (all 9 stages complete)
+- 7 core CI lints green: domain-evidence, v3.6.7 pattern-protection, v3.9.2 phase-boundary (23 A + 17 B/C/D), v3.10 #134 write-scope (23 A + 17 B/C/D), spec-consistency, rubric-weight, 215-field-norm.
+- 50 mutation/contract tests pass, 1 skipped (platform).
+- Agent classification: 23 Bucket A (single-phase, fenced) + 17 Bucket B/C/D (multi/orthogonal/meta, exempt) = 40 agents total. reflexivity_agent is the 17th B/C/D agent (Bucket C, advisory).
+- One pre-existing unrelated failure: `test_check_collaboration_depth_rubric.py::test_valid_layout_passes` on Windows (path-separator `shared/` vs `shared\` in an untouched file). Not introduced by this adaptation; surfaces only on win32.
