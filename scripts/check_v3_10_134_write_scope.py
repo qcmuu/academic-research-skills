@@ -13,9 +13,10 @@ drift before it can happen, mirroring check_v3_9_2_phase_boundary.py's 23/16 spl
 
 Three invariants:
 
-  I1 — Roster size. The Bucket A roster is exactly 23 agents (16 B/C/D exempt = 39
-       records / 38 unique names per the classification table; the manifest covers the
-       23 Bucket A names only).
+  I1 — Roster size. The Bucket A roster is exactly 23 agents (17 B/C/D exempt = 40
+       records / 39 unique names per the classification table; the manifest covers the
+       23 Bucket A names only). B/C/D count was 16 before social-science-track Stage 6
+       added reflexivity_agent to Bucket C.
 
   I2 — Three-way name set equality. The set of:
          (a) Bucket A agent file paths (the classification-table roster, single-sourced
@@ -75,7 +76,8 @@ BUCKET_A_AGENT_FILES = [
     "academic-paper-reviewer/agents/editorial_synthesizer_agent.md",
 ]
 
-# The 16 Bucket B/C/D agents that MUST NOT appear in the manifest.
+# The 17 Bucket B/C/D agents that MUST NOT appear in the manifest.
+# (social-science-track Stage 6 added reflexivity_agent to Bucket C: 16 -> 17.)
 BUCKET_BCD_AGENT_FILES = [
     "deep-research/agents/devils_advocate_agent.md",
     "deep-research/agents/report_compiler_agent.md",
@@ -87,6 +89,7 @@ BUCKET_BCD_AGENT_FILES = [
     "academic-paper/agents/revision_coach_agent.md",
     "academic-pipeline/agents/integrity_verification_agent.md",
     "academic-pipeline/agents/collaboration_depth_agent.md",
+    "academic-pipeline/agents/reflexivity_agent.md",
     "academic-pipeline/agents/claim_ref_alignment_audit_agent.md",
     "shared/agents/compliance_agent.md",
     "academic-paper/agents/intake_agent.md",
@@ -143,9 +146,11 @@ def run_checks() -> list[str]:
             f"I1: BUCKET_A_AGENT_FILES has {len(BUCKET_A_AGENT_FILES)} entries, expected 23 "
             "(classification doc: A=23). Update in lockstep with check_v3_9_2_phase_boundary.py."
         )
-    if len(BUCKET_BCD_AGENT_FILES) != 16:
+    if len(BUCKET_BCD_AGENT_FILES) != 17:
         errors.append(
-            f"I1: BUCKET_BCD_AGENT_FILES has {len(BUCKET_BCD_AGENT_FILES)} entries, expected 16."
+            f"I1: BUCKET_BCD_AGENT_FILES has {len(BUCKET_BCD_AGENT_FILES)} entries, expected 17 "
+            "(social-science-track Stage 6 added reflexivity_agent: 16 -> 17). "
+            "Update in lockstep with check_v3_9_2_phase_boundary.py."
         )
 
     # I5 — roster exhaustiveness (NON-VACUOUS guard). Glob the actual filesystem for every

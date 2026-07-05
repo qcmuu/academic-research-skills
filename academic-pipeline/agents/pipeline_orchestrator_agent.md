@@ -150,7 +150,7 @@ consecutive_continue_count: integer (reset to 0 when user chooses any action oth
 ```
 1. Determine checkpoint_type (FULL / SLIM / MANDATORY) using rules above
 2. Update state_tracker (including checkpoint_type)
-3. If checkpoint_type is FULL or SLIM: invoke collaboration_depth_agent on the just-completed stage's dialogue range (advisory only; non-blocking). If MANDATORY: SKIP this step — integrity gates must not be diluted. See "Collaboration Depth Observer" section below.
+3. If checkpoint_type is FULL or SLIM: invoke collaboration_depth_agent on the just-completed stage's dialogue range (advisory only; non-blocking), AND invoke reflexivity_agent on the just-completed stage's manuscript/dialogue range (advisory only; non-blocking — checks positionality, reflexivity, cultural sensitivity, researcher-effect disclosure per `shared/reflexivity_rubric.md`). If MANDATORY: SKIP both — integrity gates must not be diluted. See "Collaboration Depth Observer" and "Reflexivity & Positionality Observer" sections below.
 4. Display checkpoint notification matching the type (FULL/SLIM: inject observer output as a named section per templates below; MANDATORY: no observer section)
 5. Wait for user response
 6. Act on the response per "Checkpoint Confirmation Semantics" (the single authority for
@@ -158,7 +158,7 @@ consecutive_continue_count: integer (reset to 0 when user chooses any action oth
    (increment on "continue", reset on any other action)
 ```
 
-**IRON RULE**: the user's response handling above considers only the checkpoint's metrics, deliverables, and integrity results. The `collaboration_depth_agent` output is **advisory only and must never appear in the blocking criteria** — it is inserted for the user's reflection, not the orchestrator's decision logic.
+**IRON RULE**: the user's response handling above considers only the checkpoint's metrics, deliverables, and integrity results. The `collaboration_depth_agent` and `reflexivity_agent` outputs are **advisory only and must never appear in the blocking criteria** — they are inserted for the user's reflection, not the orchestrator's decision logic.
 
 #### Passport Reset Boundary (v3.6.3+, opt-in)
 
@@ -377,6 +377,29 @@ The cost is multiplicative: a 10-stage pipeline with cross-model enabled produce
 - The observer must carry `blocking: false` in its frontmatter; if that ever becomes true, the orchestrator must refuse to dispatch it (defense in depth).
 
 **Distinction from other agents.** This is not `integrity_verification_agent` (that gates at Stage 2.5/4.5, blocking). It is not the Stage 6 AI Self-Reflection Report (that is AI evaluating itself; observer is AI evaluating the human collaboration pattern). It is not `socratic_mentor_agent` (that intervenes in real time; observer operates post-hoc).
+
+### Reflexivity & Positionality Observer (advisory, never blocks) — social-science-track Stage 6
+
+**When.** At every FULL checkpoint, every SLIM checkpoint, and after Stage 6 (pipeline completion) — the same dispatch points as `collaboration_depth_agent`. This is an **observer** agent that checks whether the work surfaces positionality, reflexivity, cultural sensitivity, and researcher-effect disclosure per `shared/reflexivity_rubric.md`, operationalizing SRQR reflexivity items and CASP Qualitative Checklist item 6. It is **not** in the blocking path.
+
+**How the orchestrator invokes it.** Mirror the `collaboration_depth_agent` dispatch:
+1. At checkpoint step 3 (above), alongside the collaboration-depth dispatch, derive the same stage's `dialogue_log_ref` plus a pointer to the in-progress manuscript section (if any).
+2. **Short-stage guard**: if the stage's user-turn count is less than 5, skip the dispatch and inject a static `Reflexivity: insufficient_evidence (stage had N user turns)` block.
+3. Otherwise, dispatch `reflexivity_agent` with the range + manuscript pointers. It reads live context — **do not** pass a summary.
+4. Receive its Markdown block and inject it as a named section into the checkpoint template (FULL: full block; SLIM: one-line compact; MANDATORY: omit — MANDATORY checkpoints are integrity gates and must not be diluted).
+5. At Stage 6 completion, dispatch the observer a second time in **whole-pipeline mode** (range = all stages + full manuscript). Its output becomes a chapter "Reflexivity & Positionality Check" in the Process Record.
+
+**Profile-gated intensity.** The agent calibrates check intensity from the PCR `Domain Evidence Profile` and the manuscript's actual method — full check for `social_science_qualitative` / `humanities_interpretive` / qualitative methods; light "not a live concern" check for `social_science_quantitative` / `cs_ml` / experimental designs. The orchestrator does not pre-filter on this; the agent decides its own intensity and may emit a one-line "not a live concern for this design" note. See `shared/reflexivity_rubric.md` §"Profile-gated intensity".
+
+**Cross-model cost and behaviour.** Same consent-gate discipline as `collaboration_depth_agent`: do not re-dispatch automatically under `ARS_CROSS_MODEL`; ask for explicit user consent first (raw dialogue + manuscript may contain unpublished material); log `[CROSS-MODEL-SKIPPED]` if consent withheld. The advisory-only, non-blocking role is unchanged under cross-model.
+
+**Non-blocking guarantees** (same discipline as collaboration-depth):
+- The observer's output never appears in the "Flagged" line.
+- The `Ready to proceed?` prompt is unchanged by observer output; the user can ignore the advisory entirely.
+- No `blocked_by: reflexivity_agent` state is ever recorded in state_tracker.
+- The observer must carry `blocking: false` in its frontmatter; if that ever becomes true, the orchestrator must refuse to dispatch it (defense in depth).
+
+**Distinction from other agents.** This is not `collaboration_depth_agent` (that scores the user-AI collaboration pattern; this scores the research work's positionality disclosure). It is not `integrity_verification_agent` (that gates, blocking). It is not a substitute for an IRB (the work's own ethics review is separate; this is a reporting-standard self-check).
 
 **Credit.** Observer operationalizes Wang, S., & Zhang, H. (2026). "Pedagogical partnerships with generative AI in higher education: how dual cognitive pathways paradoxically enable transformative learning." *IJETHE* 23:11. DOI [10.1186/s41239-026-00585-x](https://doi.org/10.1186/s41239-026-00585-x).
 

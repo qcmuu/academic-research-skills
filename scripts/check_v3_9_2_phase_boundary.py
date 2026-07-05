@@ -84,21 +84,24 @@ BUCKET_A_AGENTS = [
     "academic-paper-reviewer/agents/editorial_synthesizer_agent.md",
 ]
 
-# Buckets B/C/D — 16 agents that MUST NOT have the block.
-# B (4): multi-phase; C (8): phase-orthogonal; D (4): cross-phase-meta.
+# Buckets B/C/D — 17 agents that MUST NOT have the block.
+# B (4): multi-phase; C (9): phase-orthogonal; D (4): cross-phase-meta.
+# (C grew 8 -> 9 in social-science-track Stage 6: +reflexivity_agent, an
+# advisory observer mirroring collaboration_depth_agent.)
 BUCKET_BCD_AGENTS = [
     # Bucket B — multi-phase (4)
     "deep-research/agents/devils_advocate_agent.md",          # P1, 3, 5 + Socratic L2, 4
     "deep-research/agents/report_compiler_agent.md",          # P4, 6
     "academic-paper/agents/argument_builder_agent.md",        # P3 + Plan Step 3
     "academic-paper/agents/visualization_agent.md",           # P4 + P7
-    # Bucket C — phase-orthogonal (8)
+    # Bucket C — phase-orthogonal (9)
     "deep-research/agents/socratic_mentor_agent.md",          # Socratic Layer 1-5
     "academic-paper/agents/socratic_mentor_agent.md",         # Plan Step 0-3
     "deep-research/agents/monitoring_agent.md",               # post-pipeline
     "academic-paper/agents/revision_coach_agent.md",          # Revision-Coach standalone
     "academic-pipeline/agents/integrity_verification_agent.md",  # Stage 2.5 / 4.5 gates
     "academic-pipeline/agents/collaboration_depth_agent.md",  # FULL/SLIM advisory
+    "academic-pipeline/agents/reflexivity_agent.md",          # FULL/SLIM advisory (social-science-track Stage 6)
     "academic-pipeline/agents/claim_ref_alignment_audit_agent.md",  # opt-in audit
     "shared/agents/compliance_agent.md",                      # cross-skill stage gates
     # Bucket D — cross-phase / meta (4)
@@ -248,10 +251,11 @@ def main() -> int:
             f"BUCKET_A_AGENTS has {len(BUCKET_A_AGENTS)} entries but "
             f"classification doc requires 23 (v3.9.4 added timeline_extraction_agent)"
         )
-    if len(BUCKET_BCD_AGENTS) != 16:
+    if len(BUCKET_BCD_AGENTS) != 17:
         errors.append(
             f"BUCKET_BCD_AGENTS has {len(BUCKET_BCD_AGENTS)} entries but "
-            f"classification doc requires 16"
+            f"classification doc requires 17 (social-science-track Stage 6 added "
+            f"reflexivity_agent to Bucket C: 16 -> 17)"
         )
 
     if errors:

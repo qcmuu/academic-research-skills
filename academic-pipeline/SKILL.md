@@ -204,7 +204,7 @@ If ANY answer raises concern, include it in the checkpoint presentation to the u
 
 ---
 
-## Agent Team (5 Agents)
+## Agent Team (6 Agents)
 
 | # | Agent | Role | File |
 |---|-------|------|------|
@@ -212,7 +212,8 @@ If ANY answer raises concern, include it in the checkpoint presentation to the u
 | 2 | `state_tracker_agent` | State tracker: records completed stages, produced materials, revision loop count | `agents/state_tracker_agent.md` |
 | 3 | `integrity_verification_agent` | Integrity verifier: 100% reference/citation/data verification (blocking) | `agents/integrity_verification_agent.md` |
 | 4 | `collaboration_depth_agent` | **Observer (advisory only — never blocks).** Reads dialogue log and scores user-AI collaboration pattern against `shared/collaboration_depth_rubric.md`. Invoked at FULL/SLIM checkpoints and at pipeline completion. Based on Wang & Zhang (2026). | `agents/collaboration_depth_agent.md` |
-| 5 | `claim_ref_alignment_audit_agent` | **Opt-in claim faithfulness auditor (v3.8 #103).** Audits sampled citations for claim ↔ reference alignment + negative-constraint compliance; emits per-claim `claim_audit_results[]`, `claim_drift[]`, `uncited_assertions[]`, `constraint_violations[]`. Dispatched via orchestrator §3.6 when claim_audit mode is requested. | `agents/claim_ref_alignment_audit_agent.md` |
+| 5 | `reflexivity_agent` | **Observer (advisory only — never blocks; social-science-track Stage 6).** Checks positionality, reflexivity, cultural sensitivity, and researcher-effect disclosure against `shared/reflexivity_rubric.md` (SRQR reflexivity items + CASP item 6). Invoked at FULL/SLIM checkpoints and at pipeline completion; profile-gated intensity. | `agents/reflexivity_agent.md` |
+| 6 | `claim_ref_alignment_audit_agent` | **Opt-in claim faithfulness auditor (v3.8 #103).** Audits sampled citations for claim ↔ reference alignment + negative-constraint compliance; emits per-claim `claim_audit_results[]`, `claim_drift[]`, `uncited_assertions[]`, `constraint_violations[]`. Dispatched via orchestrator §3.6 when claim_audit mode is requested. | `agents/claim_ref_alignment_audit_agent.md` |
 
 ---
 
@@ -312,16 +313,17 @@ Checkpoint: [MANDATORY/ADVISORY] — [What user needs to confirm]
 
 academic-pipeline is the orchestrator skill that coordinates the full ARS pipeline across 10 stages (delegating to deep-research, academic-paper, academic-paper-reviewer). Two invocation modes:
 
-**Mode A — orchestrator-driven (default):** `pipeline_orchestrator_agent` runs all stages end-to-end with state tracking via Material Passport. `state_tracker_agent`, `integrity_verification_agent`, `collaboration_depth_agent`, and `claim_ref_alignment_audit_agent` are dispatched by the orchestrator at the appropriate checkpoints.
+**Mode A — orchestrator-driven (default):** `pipeline_orchestrator_agent` runs all stages end-to-end with state tracking via Material Passport. `state_tracker_agent`, `integrity_verification_agent`, `collaboration_depth_agent`, `reflexivity_agent`, and `claim_ref_alignment_audit_agent` are dispatched by the orchestrator at the appropriate checkpoints.
 
 **Mode B — phase-by-phase (cross-session resume):** User invokes one phase agent at a time across sessions, typically via `ARS_PASSPORT_RESET=1` + `resume_from_passport=<hash>` (see `references/passport_as_reset_boundary.md`).
 
-In Mode B, **single-phase agents (Bucket A per `docs/design/2026-05-18-ars-v3.9.2-agent-phase-classification.md`) in the downstream skills (deep-research, academic-paper, academic-paper-reviewer) stay strictly within their assigned phase for writes**. The 5 agents in academic-pipeline itself are all cross-phase / meta by design (Bucket C/D) — they have no fence by design:
+In Mode B, **single-phase agents (Bucket A per `docs/design/2026-05-18-ars-v3.9.2-agent-phase-classification.md`) in the downstream skills (deep-research, academic-paper, academic-paper-reviewer) stay strictly within their assigned phase for writes**. The 6 agents in academic-pipeline itself are all cross-phase / meta by design (Bucket C/D) — they have no fence by design:
 
 - `pipeline_orchestrator_agent` (D — orchestrator, full pipeline visibility)
 - `state_tracker_agent` (D — meta state, all phases)
 - `integrity_verification_agent` (C — Stage 2.5 / 4.5 cross-skill gate)
 - `collaboration_depth_agent` (C — FULL/SLIM checkpoints + pipeline completion, advisory-only)
+- `reflexivity_agent` (C — FULL/SLIM checkpoints + pipeline completion, advisory-only; social-science-track Stage 6)
 - `claim_ref_alignment_audit_agent` (C — opt-in claim audit, phase-orthogonal)
 
 Routing into Mode B requires explicit user signal — `/ars-<mode>` slash command or `[direct-mode]` prefix. Ambiguous cross-phase input defaults to clarification per `.claude/CLAUDE.md` Routing Discipline + `shared/references/intent_clarification_protocol.md`. **Critically:** if `pipeline_orchestrator_agent` is dispatched on ambiguous cross-phase materials, the orchestrator itself currently cannot reconcile (this is the v3.10 conductor #134 work) — v3.9.2 routes such cases to clarification BEFORE the orchestrator runs.
@@ -510,6 +512,7 @@ Explicit prohibitions to prevent common failure modes:
 | state_tracker_agent | `agents/state_tracker_agent.md` |
 | integrity_verification_agent | `agents/integrity_verification_agent.md` |
 | collaboration_depth_agent | `agents/collaboration_depth_agent.md` |
+| reflexivity_agent | `agents/reflexivity_agent.md` |
 | claim_ref_alignment_audit_agent | `agents/claim_ref_alignment_audit_agent.md` |
 
 ---
