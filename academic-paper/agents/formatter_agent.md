@@ -211,13 +211,18 @@ The formatter agent can convert citations between any two supported formats at a
 
 ### Supported Conversions
 
-| From \ To | APA 7 | Chicago | MLA 9 | IEEE | Vancouver |
-|-----------|-------|---------|-------|------|-----------|
-| **APA 7** | — | Yes | Yes | Yes | Yes |
-| **Chicago** | Yes | — | Yes | Yes | Yes |
-| **MLA 9** | Yes | Yes | — | Yes | Yes |
-| **IEEE** | Yes | Yes | Yes | — | Yes |
-| **Vancouver** | Yes | Yes | Yes | Yes | — |
+| From \ To | APA 7 | Chicago | MLA 9 | IEEE | Vancouver | APSA | Harvard | GB/T 7714 |
+|-----------|-------|---------|-------|------|-----------|------|---------|-----------|
+| **APA 7** | — | Yes | Yes | Yes | Yes | Yes | Yes | Yes |
+| **Chicago** | Yes | — | Yes | Yes | Yes | Yes | Yes | Yes |
+| **MLA 9** | Yes | Yes | — | Yes | Yes | Yes | Yes | Yes |
+| **IEEE** | Yes | Yes | Yes | — | Yes | Yes | Yes | Yes |
+| **Vancouver** | Yes | Yes | Yes | Yes | — | Yes | Yes | Yes |
+| **APSA** | Yes | Yes | Yes | Yes | Yes | — | Yes | Yes |
+| **Harvard** | Yes | Yes | Yes | Yes | Yes | Yes | — | Yes |
+| **GB/T 7714** | Yes | Yes | Yes | Yes | Yes | Yes | Yes | — |
+
+> APSA / Harvard / GB/T 7714 are social-science-track additions (Stage 4). GB/T 7714 has dual numeric/author-date systems — preserve the source system unless the venue mandates a switch.
 
 ### Conversion Pipeline
 
@@ -254,16 +259,16 @@ Step 4: Verification
 
 ### Format-Specific Features
 
-| Feature | APA 7 | Chicago (Author-Date) | Chicago (Notes-Bib) | MLA 9 | IEEE | Vancouver |
-|---------|-------|----------------------|---------------------|-------|------|-----------|
-| In-text style | (Author, Year) | (Author Year) | Footnote superscript | (Author Page) | [Number] | (Number) |
-| Reference list name | References | References | Bibliography | Works Cited | References | References |
-| Author format | Last, F. M. | Last, First | Last, First | Last, First | F. M. Last | Last FM |
-| Year position | After author | After author | After author (bib) | End of entry | After author | After author |
-| Title case | Sentence case | Headline case | Headline case | Headline case | Sentence case | Sentence case |
-| Journal title | Italic | Italic | Italic | Italic | Italic | Abbreviated |
-| DOI format | https://doi.org/... | https://doi.org/... | https://doi.org/... | doi:... | doi:... | doi:... |
-| Ordering | Alphabetical | Alphabetical | Alphabetical | Alphabetical | Order of appearance | Order of appearance |
+| Feature | APA 7 | Chicago (Author-Date) | Chicago (Notes-Bib) | MLA 9 | IEEE | Vancouver | APSA | Harvard | GB/T 7714 |
+|---------|-------|----------------------|---------------------|-------|------|-----------|------|---------|-----------|
+| In-text style | (Author, Year) | (Author Year) | Footnote superscript | (Author Page) | [Number] | (Number) | (Author Year) | (Author, Year) | [N] or (Author, Year) |
+| Reference list name | References | References | Bibliography | Works Cited | References | References | References | Reference List | 参考文献 / References |
+| Author format | Last, F. M. | Last, First | Last, First | Last, First | F. M. Last | Last FM | Last, First Middle | Last, F.M. | LAST F M (numeric) / Last F M (a-d) |
+| Year position | After author | After author | After author (bib) | End of entry | After author | After author | After author | After author in (parens) | End of title doc-tag |
+| Title case | Sentence case | Headline case | Headline case | Headline case | Sentence case | Sentence case | Headline case | Sentence case | Sentence case |
+| Journal title | Italic | Italic | Italic | Italic | Italic | Abbreviated | Italic | Italic | Italic |
+| DOI format | https://doi.org/... | https://doi.org/... | https://doi.org/... | doi:... | doi:... | doi:... | https://doi.org/... | Available at: ... | DOI or URL |
+| Ordering | Alphabetical | Alphabetical | Alphabetical | Alphabetical | Order of appearance | Order of appearance | Alphabetical | Alphabetical | Order of appearance (num) / Alphabetical (a-d) |
 
 ### Handling Footnotes (Chicago Notes-Bibliography)
 

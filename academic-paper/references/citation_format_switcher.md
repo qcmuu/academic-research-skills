@@ -1,19 +1,21 @@
 # Citation Format Switcher — Multi-Citation Format Switching
 
-Quick-reference for switching between 5 citation formats. Used by `citation_compliance_agent` and `formatter_agent`.
+Quick-reference for switching between 8 citation formats. Used by `citation_compliance_agent` and `formatter_agent`. The social-science-track additions (APSA, Harvard, GB/T 7714) are marked (social-science-track).
 
 ## Format Comparison Matrix
 
 ### In-Text Citation Patterns
 
-| Scenario | APA 7th | Chicago (Notes) | Chicago (Author-Date) | MLA 9th | IEEE | Vancouver |
-|----------|---------|-----------------|----------------------|---------|------|-----------|
-| Single author | (Smith, 2024) | ¹ (footnote) | (Smith 2024) | (Smith 45) | [1] | ¹ (superscript) |
-| Two authors | (Smith & Jones, 2024) | ¹ | (Smith and Jones 2024) | (Smith and Jones 45) | [1] | ¹ |
-| 3+ authors | (Smith et al., 2024) | ¹ | (Smith et al. 2024) | (Smith et al. 45) | [1] | ¹ |
-| Direct quote | (Smith, 2024, p. 45) | ¹ | (Smith 2024, 45) | (Smith 45) | [1, p. 45] | ¹⁽ᵖ⁴⁵⁾ |
-| Multiple works | (Chen, 2023; Smith, 2024) | ¹ ² | (Chen 2023; Smith 2024) | (Chen 12; Smith 45) | [1], [2] | ¹˒² |
-| Order | Alphabetical | Order of appearance | Alphabetical | Alphabetical | Order of appearance | Order of appearance |
+| Scenario | APA 7th | Chicago (Notes) | Chicago (Author-Date) | MLA 9th | IEEE | Vancouver | APSA (SS-track) | Harvard (SS-track) | GB/T 7714 (SS-track) |
+|----------|---------|-----------------|----------------------|---------|------|-----------|-----------------|--------------------|----------------------|
+| Single author | (Smith, 2024) | ¹ (footnote) | (Smith 2024) | (Smith 45) | [1] | ¹ (superscript) | (Smith 2024) | (Smith, 2024) | (Smith, 2024) / [1]² |
+| Two authors | (Smith & Jones, 2024) | ¹ | (Smith and Jones 2024) | (Smith and Jones 45) | [1] | ¹ | (Smith and Jones 2024) | (Smith and Jones, 2024) | (Smith and Jones, 2024) |
+| 3+ authors | (Smith et al., 2024) | ¹ | (Smith et al. 2024) | (Smith et al. 45) | [1] | ¹ | (Smith et al. 2024) | (Smith et al., 2024) | (Smith et al., 2024) |
+| Direct quote | (Smith, 2024, p. 45) | ¹ | (Smith 2024, 45) | (Smith 45) | [1, p. 45] | ¹⁽ᵖ⁴⁵⁾ | (Smith 2024, 45) | (Smith, 2024, p. 45) | (Smith, 2024)⁴⁵ |
+| Multiple works | (Chen, 2023; Smith, 2024) | ¹ ² | (Chen 2023; Smith 2024) | (Chen 12; Smith 45) | [1], [2] | ¹˒² | (Chen 2023; Smith 2024) | (Chen, 2023; Smith, 2024) | (Chen, 2023; Smith, 2024) |
+| Order | Alphabetical | Order of appearance | Alphabetical | Alphabetical | Order of appearance | Order of appearance | Alphabetical | Alphabetical | Order of appearance (numbered) or alphabetical (author-date) |
+
+² GB/T 7714 supports BOTH a numbered (顺序编码制, common in STEM Chinese journals) and an author-date (著者-年制, common in social-science Chinese journals) system — pick per venue.
 
 ### Reference List Naming
 
@@ -25,6 +27,9 @@ Quick-reference for switching between 5 citation formats. Used by `citation_comp
 | MLA 9th | Works Cited | Alphabetical |
 | IEEE | References | Order of appearance |
 | Vancouver | References | Order of appearance |
+| APSA | References | Alphabetical |
+| Harvard | Reference List | Alphabetical |
+| GB/T 7714 | 参考文献 (References) | Order of appearance (numbered) or alphabetical (author-date) |
 
 ## Format Details
 
@@ -129,6 +134,70 @@ Smith, John A., and Betty C. Jones. "Article Title in Title Case."
 ```
 
 **Key rules**: Numbered in order of appearance, no spaces in initials, abbreviated journal titles (per NLM), semicolon before volume, colon before pages.
+
+---
+
+### APSA — American Political Science Association (social-science-track)
+**Discipline**: Political science, public administration
+
+APSA is a modified Chicago Author-Date style adapted for political science. It drops the comma between author and year that Chicago uses, and uses an em-dash for repeated authors in the reference list.
+
+**In-text**: (Smith 2024) — no comma between author and year; (Smith and Jones 2024); (Smith et al. 2024); (Smith 2024, 45) for direct quotes.
+
+**Reference**:
+```
+Smith, John A. 2024. "Article Title in Sentence Case." *Journal Title in
+Title Case* 45 (2): 123–45. https://doi.org/10.xxxx.
+```
+
+**Repeated author**: use a 3-em dash `———.` in place of the author name for the second and subsequent works by the same author.
+
+**Key rules**: Author comma year (no comma in in-text), italics for journal title, en-dash in page ranges, italics for book titles, headline-style capitalization for titles.
+
+---
+
+### Harvard — Author-Date (social-science-track)
+**Discipline**: General social sciences, business, education (especially UK/AU institutions)
+
+Harvard is a family of author-date styles (not a single canonical standard — institutions vary). The form below is the most common convention; check the target institution's house variant.
+
+**In-text**: (Smith, 2024) — comma between author and year; (Smith and Jones, 2024); (Smith et al., 2024); (Smith, 2024, p. 45) for direct quotes.
+
+**Reference**:
+```
+Smith, J.A. (2024) 'Article title in sentence case', *Journal Title in
+Title Case*, 45(2), pp. 123–145. Available at: https://doi.org/10.xxxx
+(Accessed: DD Month YYYY).
+```
+
+**Key rules**: Author comma year (with comma in in-text), single quotes for article titles, italics for journal/book titles, "pp." before pages, "Available at:" for URLs (the distinguishing Harvard convention vs APA), Accessed date for online sources.
+
+> Because Harvard has no single authority, **always confirm the target venue's house style** before finalizing. The variant above is the most widely taught.
+
+---
+
+### GB/T 7714-2015 — Chinese National Standard (social-science-track)
+**Discipline**: Chinese-language venues across all disciplines; required by most Chinese journals and degree-granting institutions.
+
+GB/T 7714 supports two systems — select per venue:
+- **顺序编码制 (numeric / order-of-citation)** — common in STEM Chinese journals
+- **著者-年制 (author-date)** — common in social-science and humanities Chinese journals
+
+> See `references/gbt7714_style_guide.md` for the full rules including Chinese-vs-Western author handling, document-type codes, and bilingual citation rules. The summary below is the quick reference.
+
+**Numeric in-text**: `[1]` or `[1-3]` in order of appearance
+**Author-date in-text**: `(Smith, 2024)` / `(张三, 2024)`
+
+**Reference (numeric, journal article)**:
+```
+[1] SMITH J A, JONES B C. Article title in sentence case[J]. Journal
+    Title, 2024, 45(2): 123-145.
+[2] 张三, 李四. 文章题名[J]. 期刊名, 2024, 45(2): 123-145.
+```
+
+**Document-type codes** (in brackets after the title): `[J]` journal, `[M]` monograph/book, `[C]` conference proceedings, `[D]` dissertation, `[R]` report, `[N]` newspaper article, `[EB/OL]` electronic/online.
+
+**Key rules**: Surname-space-initials (no period between, comma between authors), uppercase Western surnames in numeric mode, document-type tag mandatory, year-volume(issue):pages punctuation differs from Western styles, Chinese names kept as-is (no inversion).
 
 ## Conversion Quick Reference
 

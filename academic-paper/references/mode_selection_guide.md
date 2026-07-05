@@ -352,6 +352,10 @@ Before conversion, ALL of the following must be true:
 "Do a literature review on..."           -> lit-review
 "Convert this paper to LaTeX"            -> format-convert
 "Convert citations to IEEE"              -> format-convert
+"Convert citations to APSA"              -> format-convert
+"Convert citations to Harvard"           -> format-convert
+"Convert citations to GB/T 7714"         -> format-convert
+"把引用转成国标格式"                       -> format-convert
 "Check the citations in this paper"      -> citation-check
 "guide my paper"                         -> plan
 "help me plan my paper"                  -> plan
