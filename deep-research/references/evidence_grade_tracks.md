@@ -197,7 +197,80 @@ reflexivity_agent             →  whether POSITIONING is reported (advisory)
 
 ---
 
-## 9. INVARIANTS (copy of load-bearing rules)
+## 9. Multi-claim_class track application (one paper / one source, many claims)
+
+A single manuscript or cited source often advances **more than one claim class**. Track and
+Evidence fitness are **per claim**, not per document.
+
+### Rules
+
+1. **One primary claim_class per assessment card.** If a source supports both a causal
+   estimand and an interpretive mechanism story, emit **two cards** (or two clearly
+   separated blocks), each with its own `claim_class`, fitness grade, and track application.
+2. **Do not average fitness across claim classes.** A gold-standard ethnography (fitness A
+   for `interpretive_meaning` under `ss_qualitative`) does not license fitness A for a
+   bolted-on `causal_effect` sentence in the same paper.
+3. **Profile still sets the default track** (§3). Within that track, apply the row of §4
+   that matches **this claim’s** `claim_class`. If the claim class is foreign to the
+   default track (e.g. profile `social_science_quantitative` but a nested qualitative
+   vignette), either:
+   - grade the vignette under `ss_qualitative` gold standards for that claim only and tag
+     `[CLAIM-TRACK-OVERRIDE]` with one-line rationale, **or**
+   - keep the run track and mark the claim `unspecified` / low fitness if the tradition
+     mismatch is unaddressed.
+4. **Forbidden:** one Overall letter for the whole paper used to rubber-stamp every
+   in-text claim; mixing design-code height from claim A into fitness for claim B.
+5. **Communication / mixed corpora:** strand-split (§3) is the multi-claim rule at corpus
+   scale; within a single mixed-methods article, treat quant and qual **strands** as
+   separate claim bundles.
+
+### Worked multi-claim example (normative)
+
+**Paper:** staggered DiD on a labor reform + a short ethnographic vignette on shop-floor
+meaning-making. Profile: `social_science_quantitative` → default track `ss_quantitative`.
+
+| Card | Claim class | Track application | Fitness A requires |
+|---|---|---|---|
+| 1 | `causal_effect` (“reform raised wages by X”) | `ss_quantitative` | identification engagement (event-study / parallel trends / etc.) — **not** “DiD = III” |
+| 2 | `interpretive_meaning` (vignette on worker identity) | `[CLAIM-TRACK-OVERRIDE]` → `ss_qualitative` norms for this claim only | trustworthiness package for the vignette; **cannot** inherit Card 1’s fitness |
+
+**Forbidden outcome:** Card 2 Overall D “because Level VI” while Card 1 is A; or Card 1
+fitness A solely because the vignette is rich.
+
+**Same-source bibliography case:** a methods paper that both (a) proves a theorem
+(`theoretical_argument`, design_code NA) and (b) reports a simulation
+(`descriptive_pattern`) → two cards; theorem quality ≠ simulation quality.
+
+### Claim → preferred track norms (quick map)
+
+| ClaimClass | Prefer fitness norms from |
+|---|---|
+| `causal_effect` | `ss_quantitative` §4.2 or `ebm_design` §4.1 (if experimental) |
+| `descriptive_pattern` | track of the run; sample/data semantics follow that track |
+| `interpretive_meaning` | `ss_qualitative` §4.3 (override tag if run track is quant) |
+| `theoretical_argument` | `ss_qualitative` / `humanities` theory row; design_code often NA |
+| `policy_evaluative` | `ss_quantitative` policy row or mixed with explicit scope |
+| `methodological` | soundness of procedure vs stated goal — not pyramid height |
+| `unspecified` | force clarification or conservative (lower) fitness |
+
+---
+
+## 10. Identification audit (causal claims under `ss_quantitative`)
+
+For `claim_class: causal_effect` under track `ss_quantitative`, consumers SHOULD attach an
+**Identification Audit** (full or short form) per
+[`shared/templates/identification_audit_card.md`](../../shared/templates/identification_audit_card.md).
+
+- Separates estimand / variation / assumptions / diagnostics / non-testable argument / scope.
+- Verdicts: `ready` | `needs design repair` | `not causal yet` — **advisory only**.
+- Evidence fitness A for causal_effect is **incompatible** with a short-form note that
+  assumptions and diagnostics are both absent.
+- Does not replace §2.8 statistical reporting checklists; it grades the **identifying
+  argument**, not APA decimals.
+
+---
+
+## 11. INVARIANTS (copy of load-bearing rules)
 
 1. Design code ≠ weight — never sole Overall input.
 2. Track resolution purity — academic-paper track = f(profile) only (no silent auto-track as authority).
@@ -207,3 +280,5 @@ reflexivity_agent             →  whether POSITIONING is reported (advisory)
 6. Reserved profiles stay neutral until real checklists ship.
 7. #259 non-regression — admit gates remain loosen-only.
 8. Orthogonal to epistemic_status and reflexivity_agent.
+9. **Per-claim grading** — multi-claim documents use one card (or block) per claim_class; no cross-claim fitness averaging (§9).
+10. **Causal fitness needs identification** — under `ss_quantitative` + `causal_effect`, fitness A requires identification engagement (§10), not design_code alone.

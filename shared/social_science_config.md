@@ -108,3 +108,7 @@ Spec: [`docs/design/2026-07-10-dual-track-evidence-grading-spec.md`](../docs/des
 | `unknown_user_defined` / absent | `neutral` | Pre-dual-track behavior; grading emits `[NO-TRACK-NEUTRAL]` |
 
 **Consumers:** `source_verification_agent` (primary grader); `literature_strategist_agent` (attach track label; no design-code ranking under ss_* / humanities). **Non-consumers for blocking:** integrity gates, citation_existence policy, reflexivity_agent.
+
+**P1 add-ons (still advisory):**
+- **Multi-claim grading** — one assessment card per `claim_class` (`evidence_grade_tracks.md` §9); optional `[CLAIM-TRACK-OVERRIDE]`.
+- **Identification Audit** — for `causal_effect` under `ss_quantitative`: template `shared/templates/identification_audit_card.md`; full card via `methodology_reviewer_agent`, short form via `source_verification_agent`.

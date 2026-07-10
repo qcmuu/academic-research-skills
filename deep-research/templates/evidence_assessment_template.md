@@ -22,8 +22,11 @@ Per-source quality assessment card. Used by the source_verification_agent to sys
 
 - **Evidence grade track**: [ebm_design / ss_quantitative / ss_qualitative / humanities / neutral]
 - **Claim class**: [causal_effect / descriptive_pattern / interpretive_meaning / theoretical_argument / methodological / policy_evaluative / unspecified]
-- **Track resolution**: [from Domain Evidence Profile `<profile>` / scholar declaration / neutral default]
-- **Advisories**: [none | `[NO-TRACK-NEUTRAL]` | `[TRACK-MIXED-DEFAULT]` | `[TRACK-COARSE-PROFILE]` | …]
+- **Track resolution**: [from Domain Evidence Profile `<profile>` / scholar declaration / neutral default / `[CLAIM-TRACK-OVERRIDE]` …]
+- **Advisories**: [none | `[NO-TRACK-NEUTRAL]` | `[TRACK-MIXED-DEFAULT]` | `[TRACK-COARSE-PROFILE]` | `[CLAIM-TRACK-OVERRIDE]` | …]
+- **Multi-claim note**: [single claim | card N of M for this source — see `evidence_grade_tracks.md` §9]
+
+> One card = one primary claim_class. Do not average fitness across claim classes.
 
 ---
 
@@ -98,6 +101,11 @@ Per-source quality assessment card. Used by the source_verification_agent to sys
 
 **Track rationale**: [one line — e.g. "ss_qualitative: trustworthiness package met; Level VI is design code only"]
 
+### Identification Audit (only if claim_class = causal_effect)
+- Prefer short form from `shared/templates/identification_audit_card.md` for bibliography sources; full card for the scholar’s own manuscript (methodology reviewer).
+- **ID short-form:** design=[…] estimand=[…] variation=[…] assumptions engaged=[yes/partial/no] diagnostics=[yes/partial/no] → verdict hint=[ready|needs design repair|not causal yet]
+- Fitness A for causal_effect requires identification engagement (not design_code alone).
+
 ### Recommendation
 - [ ] **Use as primary evidence** (Grade A-B)
 - [ ] **Use as supporting evidence** (Grade B-C)
@@ -148,4 +156,5 @@ Per-source quality assessment card. Used by the source_verification_agent to sys
 - Any predatory journal flag requires full verification
 - Under `ss_qualitative` / `humanities`, do not lower Overall solely because design code is VI/VII
 - Under `ss_quantitative`, do not award causal Evidence fitness A solely from design code III without identification engagement
+- Multi-claim sources: separate cards per claim_class; no cross-claim fitness averaging (`evidence_grade_tracks.md` §9)
 - Absent profile/declaration → track `neutral` and emit `[NO-TRACK-NEUTRAL]` on the run summary

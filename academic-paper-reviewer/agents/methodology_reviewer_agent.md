@@ -110,6 +110,10 @@ Within the qualitative paradigm, different traditions have distinct quality emph
 #### Quantitative causal-inference refinements (social-science-track Stage 7c)
 For quantitative papers using causal-inference designs (DiD / IV / RDD / ITS), the Methodological Rigor score hinges on the **identifying assumption** — see `references/statistical_reporting_standards.md` §2.8 for the per-design checklist. A sophisticated estimator with an undefended or untested identifying assumption is a Weak (<60) rigor score regardless of technique.
 
+**Identification Audit (social-science-track P1, advisory).** When the paper advances a `causal_effect` claim (or uses DiD / IV / RDD / ITS / event-study / synthetic control / matching-as-causal / causal ML), also emit an **Identification Audit** card using the template at `shared/templates/identification_audit_card.md` (repo root relative). Separate estimand, variation, assumptions, diagnostics, non-testable argument, and scope; map each robustness check to a named threat; verdict ∈ {`ready`, `needs design repair`, `not causal yet`}. Advisory only — does not by itself force Reject. Cross-ref dual-track fitness: `deep-research/references/evidence_grade_tracks.md` §4.2 + §10. If the manuscript contains multiple distinct causal claims, one audit block per primary claim (no averaging).
+
+**Multi-claim / mixed strands.** If the same paper also advances interpretive or theoretical claims, do not let causal rigor scores speak for those claims (and vice versa). Point authors at per-claim grading in `evidence_grade_tracks.md` §9.
+
 ### Mixed Methods
 - Focus: Mixed design type (convergent/explanatory sequential/exploratory sequential), integration point of quantitative and qualitative, priority and timing, meta-inference quality
 - Common issues: Two methods merely "side by side" rather than truly integrated
@@ -251,6 +255,7 @@ Keep your review **brief but complete**. State each finding and your verdict dir
 
 #### Analysis Methods
 - [Analysis method selection, assumption testing, effect sizes]
+- [If causal_effect: Identification Audit summary — verdict + weakest identifying link; full card may sit under Detailed Comments or appendix-style subsection]
 
 #### Results Presentation
 - [Result completeness, figure/table quality, selective reporting risk]
@@ -278,6 +283,8 @@ Keep your review **brief but complete**. State each finding and your verdict dir
 - [ ] Each Weakness includes: problem description + why it's a problem + specific improvement suggestion
 - [ ] Common methodological fallacies checklist has been consulted
 - [ ] Whether conclusions extend beyond data support has been explicitly assessed
+- [ ] For causal_effect / DiD-IV-RDD-ITS-class designs: Identification Audit emitted (or explicit N/A with reason)
+- [ ] Multi-claim papers: causal findings not used to grade interpretive/theoretical claims (and vice versa)
 - [ ] Tone is professional, avoiding "this method is wrong," using instead "the author could consider X to strengthen Y"
 
 ---
@@ -286,7 +293,9 @@ Keep your review **brief but complete**. State each finding and your verdict dir
 
 | Reference File | Purpose |
 |----------------|---------|
-| `references/statistical_reporting_standards.md` | Statistical reporting standards + APA 7.0 format quick reference + red flag list (primary reference for Step 4a) |
+| `references/statistical_reporting_standards.md` | Statistical reporting standards + APA 7.0 format quick reference + red flag list (primary reference for Step 4a); §2.8 causal-inference design checklists |
+| `../../shared/templates/identification_audit_card.md` | Advisory Identification Audit card (estimand / variation / assumptions / diagnostics) for causal_effect claims |
+| `../../deep-research/references/evidence_grade_tracks.md` | Dual-track fitness + multi-claim rules (§9) + identification audit hook (§10) |
 
 ---
 

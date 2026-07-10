@@ -22,6 +22,8 @@ MIRROR_PATHS = [
     "shared/social_science_config.md",
     "academic-paper/agents/literature_strategist_agent.md",
     "docs/design/2026-07-10-dual-track-evidence-grading-spec.md",
+    "shared/templates/identification_audit_card.md",
+    "academic-paper-reviewer/agents/methodology_reviewer_agent.md",
 ]
 
 
@@ -123,3 +125,36 @@ def test_neg_t7_missing_spec(tmp_path: Path) -> None:
     assert "T7" in r.stderr
 
 
+def test_neg_t8_drop_id_audit_card(tmp_path: Path) -> None:
+    root = _clone_surface(tmp_path)
+    (root / "shared/templates/identification_audit_card.md").unlink()
+    r = _run(root)
+    assert r.returncode == 1
+    assert "T8" in r.stderr
+
+
+def test_neg_t8_strip_meth_wiring(tmp_path: Path) -> None:
+    root = _clone_surface(tmp_path)
+    p = root / "academic-paper-reviewer/agents/methodology_reviewer_agent.md"
+    text = p.read_text(encoding="utf-8")
+    text = text.replace("Identification Audit", "REMOVED_AUDIT")
+    text = text.replace("identification_audit_card.md", "removed.md")
+    p.write_text(text, encoding="utf-8")
+    r = _run(root)
+    assert r.returncode == 1
+    assert "T8" in r.stderr
+
+
+def test_neg_t9_drop_multi_claim(tmp_path: Path) -> None:
+    root = _clone_surface(tmp_path)
+    p = root / "deep-research/references/evidence_grade_tracks.md"
+    text = p.read_text(encoding="utf-8")
+    # Remove multi-claim section heading and invariant
+    text = text.replace("Multi-claim_class", "X").replace("multi-claim", "x")
+    text = text.replace("Multi-claim", "X").replace("Per-claim grading", "X")
+    text = text.replace("one card", "unit")
+    p.write_text(text, encoding="utf-8")
+    r = _run(root)
+    assert r.returncode == 1
+    # T1 and/or T9 should fire
+    assert "T1" in r.stderr or "T9" in r.stderr

@@ -20,6 +20,10 @@ PROFILES = REPO_ROOT / "academic-paper" / "references" / "domain_evidence_profil
 CONFIG = REPO_ROOT / "shared" / "social_science_config.md"
 STRATEGIST = REPO_ROOT / "academic-paper" / "agents" / "literature_strategist_agent.md"
 SPEC = REPO_ROOT / "docs" / "design" / "2026-07-10-dual-track-evidence-grading-spec.md"
+ID_AUDIT = REPO_ROOT / "shared" / "templates" / "identification_audit_card.md"
+METH_REVIEWER = (
+    REPO_ROOT / "academic-paper-reviewer" / "agents" / "methodology_reviewer_agent.md"
+)
 
 TRACK_ENUM = (
     "ebm_design",
@@ -63,6 +67,14 @@ def check_t1() -> list[str]:
         f.append("T1: tracks doc should mention Level VI clamp for qualitative")
     if "Advisory only" not in t and "advisory only" not in t.lower():
         f.append("T1: tracks doc missing advisory-only statement")
+    if "Multi-claim" not in t and "multi-claim" not in t.lower():
+        f.append("T1: tracks doc missing multi-claim_class section")
+    if "CLAIM-TRACK-OVERRIDE" not in t:
+        f.append("T1: tracks doc missing [CLAIM-TRACK-OVERRIDE] token")
+    if "Identification Audit" not in t and "identification audit" not in t.lower():
+        f.append("T1: tracks doc missing Identification Audit hook")
+    if "identification_audit_card.md" not in t:
+        f.append("T1: tracks doc missing pointer to identification_audit_card.md")
     return f
 
 
@@ -128,6 +140,10 @@ def check_t4() -> list[str]:
         f.append("T4: source_verification_agent must discuss design codes")
     if "Track resolution" not in t and "track resolution" not in t.lower():
         f.append("T4: source_verification_agent missing track resolution procedure")
+    if "identification_audit_card.md" not in t and "Identification Audit" not in t:
+        f.append("T4: source_verification_agent missing Identification Audit hook")
+    if "claim_class" not in t.lower() and "claim class" not in t.lower():
+        f.append("T4: source_verification_agent missing multi-claim / claim_class language")
     return f
 
 
@@ -190,6 +206,51 @@ def check_t7() -> list[str]:
     return f
 
 
+def check_t8() -> list[str]:
+    """P1: Identification Audit template + methodology_reviewer wiring."""
+    f: list[str] = []
+    card = _read(ID_AUDIT)
+    if not card:
+        return ["T8: shared/templates/identification_audit_card.md missing"]
+    for token in (
+        "Estimand",
+        "Identifying variation",
+        "Threat",
+        "needs design repair",
+        "not causal yet",
+        "Advisory only",
+    ):
+        if token not in card:
+            f.append(f"T8: identification_audit_card missing '{token}'")
+    if "ready" not in card:
+        f.append("T8: identification_audit_card missing verdict token 'ready'")
+    meth = _read(METH_REVIEWER)
+    if not meth:
+        f.append("T8: methodology_reviewer_agent.md missing")
+    else:
+        if "identification_audit_card.md" not in meth and "Identification Audit" not in meth:
+            f.append("T8: methodology_reviewer missing Identification Audit wiring")
+        if "causal_effect" not in meth and "causal-inference" not in meth:
+            f.append("T8: methodology_reviewer should still reference causal-inference path")
+    return f
+
+
+def check_t9() -> list[str]:
+    """P1: multi-claim surface on template + SVA + tracks (cross-check)."""
+    f: list[str] = []
+    tmpl = _read(TEMPLATE)
+    sva = _read(SVA)
+    tracks = _read(TRACKS)
+    if "Multi-claim" not in tmpl and "multi-claim" not in tmpl.lower() and "card N of M" not in tmpl:
+        f.append("T9: evidence_assessment_template missing multi-claim note")
+    if "CLAIM-TRACK-OVERRIDE" not in tmpl and "claim_class" not in tmpl:
+        f.append("T9: template should surface claim_class / override advisories")
+    if "multi-claim" not in sva.lower() and "claim classes" not in sva.lower() and "§9" not in sva:
+        f.append("T9: source_verification_agent missing multi-claim grading rule")
+    if "Per-claim grading" not in tracks and "one card" not in tracks.lower():
+        f.append("T9: tracks doc missing per-claim grading invariant language")
+    return f
+
 
 CHECKS: list[tuple[str, Callable[[], list[str]]]] = [
     ("T1", check_t1),
@@ -199,6 +260,8 @@ CHECKS: list[tuple[str, Callable[[], list[str]]]] = [
     ("T5", check_t5),
     ("T6", check_t6),
     ("T7", check_t7),
+    ("T8", check_t8),
+    ("T9", check_t9),
 ]
 
 

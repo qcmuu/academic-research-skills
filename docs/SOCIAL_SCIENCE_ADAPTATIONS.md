@@ -35,6 +35,7 @@
 | 7 | Reviewer discipline calibration (7a DiD/IV/RDD + 7b Dim3 + 7c qual) | ✅ done |
 | 8 | Chinese social-science ecology (CNKI / CSSCI) | ✅ done |
 | 9 | Dual-track evidence grading (P0) | ✅ done |
+| 9b | P1: Identification Audit + multi-claim track rules | ✅ done |
 
 ## Change ledger
 
@@ -116,8 +117,17 @@ Format: `[STAGE] [NEW|EDIT] path — what changed`.
 - `[NEW] scripts/check_evidence_grade_tracks.py` + tests — surface lint for tracks doc, mirrored tables, no Weight authority table, template fitness fields.
 - **Verified:** `check_domain_evidence_profile.py` OK (C6 pin held); `check_evidence_grade_tracks.py` OK.
 
+### Stage 9b — P1 Identification Audit + multi-claim track application
+- `[NEW] shared/templates/identification_audit_card.md` — estimand/variation/assumptions/diagnostics/threat map; verdicts ready | needs design repair | not causal yet; full + short form; advisory only.
+- `[EDIT] deep-research/references/evidence_grade_tracks.md` — §9 multi-claim_class rules + worked DiD+vignette example; §10 Identification Audit hook; invariants 9–10.
+- `[EDIT] academic-paper-reviewer/agents/methodology_reviewer_agent.md` — emit full ID audit for causal_effect / DiD-IV-RDD-class designs; multi-claim boundary; refs table.
+- `[EDIT] deep-research/agents/source_verification_agent.md` — multi-claim cards; short-form ID audit; forbidden cross-claim fitness inflation.
+- `[EDIT] deep-research/templates/evidence_assessment_template.md` — multi-claim note + ID short-form block.
+- `[EDIT] scripts/check_evidence_grade_tracks.py` — T8 (ID card + methodology wiring), T9 (multi-claim surface); mutation tests extended.
+- `[EDIT] shared/social_science_config.md` — P1 add-ons pointer.
+- **Verified:** `check_evidence_grade_tracks.py` OK; dual-track + domain-evidence mutation suites green.
 
-### Final verification (stages 0–9)
-- Core CI lints green including domain-evidence (C6 FSA pin unchanged) + evidence-grade-tracks.
+### Final verification (stages 0–9b)
+- Core CI lints green including domain-evidence (C6 FSA pin unchanged) + evidence-grade-tracks (T1–T9).
 - Agent classification unchanged (no new agent).
 - Pre-existing unrelated Windows path-separator failure in collaboration-depth rubric test may still surface on win32.

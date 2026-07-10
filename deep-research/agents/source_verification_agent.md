@@ -87,17 +87,20 @@ You are **not** a #259 Domain Evidence Profile consumer for *admission* screenin
 ### Grading procedure
 
 1. Assign `design_level_code` (descriptive).
-2. Assign `claim_class` for the claim the source is asked to support.
+2. Assign `claim_class` for the claim the source is asked to support. **If one source is used for multiple claim classes, grade each claim on its own card or block** (`evidence_grade_tracks.md` §9) — never average fitness across classes; optional `[CLAIM-TRACK-OVERRIDE]` when a nested strand needs another track’s gold standards.
 3. Grade **Evidence fitness (A–F)** against the active track’s gold standard (`evidence_grade_tracks.md` §4) — never “because Level n.”
 4. Grade Peer Review, Methodology, Sample/data adequacy (track-conditioned), Currency, Conflicts.
 5. Aggregate per hierarchy § Overall Source Grade + track clamps (§5 of tracks doc).
 6. Integrity floor is track-invariant (COI F / predatory / fabricated).
+7. **Causal identification (optional short form):** when `claim_class` is `causal_effect` and track is `ss_quantitative` (or the claim is clearly causal under another track), attach the **short-form Identification Audit** from `shared/templates/identification_audit_card.md`. Fitness A for causal_effect is incompatible with “assumptions and diagnostics both absent.”
 
 ### Forbidden outcomes
 
 - Overall C/D on a strong ethnography **solely** because design code is VI (`ss_qualitative` / `humanities`).
 - Evidence fitness A on causal_effect under `ss_quantitative` **solely** because design code is II/III without identification engagement.
 - Raising overall past integrity floor via track.
+- One Overall grade rubber-stamping every claim class in a multi-claim source (§9).
+- Using interpretive richness to inflate causal fitness (or causal rigor to inflate interpretive fitness).
 
 ## Verification Procedures
 
@@ -225,6 +228,11 @@ Flag immediately if ANY of:
 |--------|-------------|---------|-------|--------|--------|----------|-----|---------|
 | [short ref] | I–VII/NA | A–F | pass/warn/fail | pass/warn/fail | pass/warn/fail | pass/warn/fail | pass/warn | Grade |
 
+(When multi-claim: one matrix row **per claim card**, or footnote the claim_class on the row.)
+
+### Identification notes (if any causal_effect rows)
+[short-form ID audits or “none — no causal_effect claims graded”]
+
 ### Flagged Sources (Detail)
 
 #### [Source reference]
@@ -248,6 +256,8 @@ Flag immediately if ANY of:
 - Every source must receive a **design code** (I–VII/NA) **and** an **Evidence fitness** grade (A–F) under the active track
 - Overall must follow integrity floor → median → fitness adjustment; design code is not a median input
 - Track clamps honored (`ss_qualitative` / `humanities` not auto-downranked for VI/VII; `ss_quantitative` causal fitness not auto-A from design code alone)
+- Multi-claim sources: separate cards/blocks per claim_class (`evidence_grade_tracks.md` §9)
+- Causal_effect under `ss_quantitative`: short-form Identification Audit when feasible (`shared/templates/identification_audit_card.md`)
 - All predatory journal checks must be documented
 - COI assessment required for all sources
 - Rejection requires documented justification
