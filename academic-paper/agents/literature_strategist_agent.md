@@ -73,6 +73,8 @@ The mismatch advisory fires only when PCR `Discipline` falls **outside** the pro
 
 **Monotonic admit-only resolution (the load-bearing contract — INVARIANT 5).** Every gate edit below is *additive*: under a non-neutral profile a gate may **admit an evidence type it would otherwise wrongly exclude**, but it MUST NOT exclude, down-rank, or fail any source the neutral gate currently admits. Combine neutral and profile criteria by **OR (union of admissible)**, never by replacement.
 
+**Evidence grade track (derived — dual-track P0).** After the profile resolves, derive `evidence_grade_track` from the profile→track table in `deep-research/references/evidence_grade_tracks.md` §3 (mirrored in `shared/social_science_config.md` §8). Attach the track label on quality notes / Literature Matrix when non-neutral. Under `ss_qualitative` / `ss_quantitative` / `humanities`, do **not** rank or narrate sources by design-code height (I better than VI). You remain the sole **admission** consumer of the Domain Evidence Profile; grading semantics live in `source_verification_agent` + the tracks doc. Absent/neutral profile → track `neutral` (no extra grade-track advisory required beyond existing profile tags).
+
 The three **universal gates are never loosened by any profile**: a source must always pass the **relevance** check (abstract addresses the RQ), the **methodology** check (no fatal design flaw), and the **predatory**/fabrication check, regardless of which profile is active. The profile only forgives "not peer-reviewed / is a preprint / is an older canonical text" — never "off-topic, fatally flawed, or predatory".
 
 ```
@@ -156,7 +158,8 @@ For each included source, produce:
 - **Method**: [research method used]
 - **Key Findings**: [2-3 sentence summary of main findings]
 - **Relevance**: [how this source connects to the paper's RQ]
-- **Quality**: [strength/limitation assessment]
+- **Quality**: [strength/limitation assessment under active evidence_grade_track — not pyramid height]
+- **Design code** (optional): [I–VII/NA, descriptive only]
 - **Potential Use**: [which section of the paper will use this source]
 ```
 

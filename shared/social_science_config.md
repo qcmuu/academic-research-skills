@@ -90,3 +90,21 @@ statement** and demonstrate **reflexivity**. The `reflexivity_agent` (advisory, 
 for: declared standpoint, cultural sensitivity, power-asymmetry handling, member checking /
 respondent validation, and researcher-effect disclosure. This is a social-science norm that the
 upstream suite does not currently surface.
+
+## 8. Evidence grade track resolution (dual-track P0)
+
+Drives how admitted sources are **graded** (claim-fitness), not which sources are **admitted**
+(#259). Canonical vocabulary: [`deep-research/references/evidence_grade_tracks.md`](../deep-research/references/evidence_grade_tracks.md).
+Spec: [`docs/design/2026-07-10-dual-track-evidence-grading-spec.md`](../docs/design/2026-07-10-dual-track-evidence-grading-spec.md).
+
+| Domain Evidence Profile (effective) | EvidenceGradeTrack | Notes |
+|---|---|---|
+| `social_science_qualitative` | `ss_qualitative` | Trustworthiness / method–claim fit; Level VI may be Overall A |
+| `social_science_quantitative` | `ss_quantitative` | Identification quality for causal claims; not RCT-required |
+| `communication_mixed` | strand-split; undivided → `ss_quantitative` + `[TRACK-MIXED-DEFAULT]` | Qual strand uses `ss_qualitative` |
+| `general_social_science` | method-driven; unknown → `neutral` + `[TRACK-COARSE-PROFILE]` | Prefer refined profiles when possible |
+| `humanities_interpretive` | `humanities` | Primary-source grounding |
+| `cs_ml` | `ebm_design` | Reproducibility-emphasized |
+| `unknown_user_defined` / absent | `neutral` | Pre-dual-track behavior; grading emits `[NO-TRACK-NEUTRAL]` |
+
+**Consumers:** `source_verification_agent` (primary grader); `literature_strategist_agent` (attach track label; no design-code ranking under ss_* / humanities). **Non-consumers for blocking:** integrity gates, citation_existence policy, reflexivity_agent.

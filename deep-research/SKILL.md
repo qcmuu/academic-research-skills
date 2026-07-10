@@ -430,7 +430,8 @@ See `academic-pipeline/SKILL.md` for the complete workflow.
 | Reference | Purpose | Used By |
 |-----------|---------|---------|
 | `references/apa7_style_guide.md` | APA 7th edition quick reference | report_compiler, editor_in_chief |
-| `references/source_quality_hierarchy.md` | Evidence pyramid + grading rubric | source_verification, bibliography |
+| `references/source_quality_hierarchy.md` | Design-code pyramid + fitness grading rubric | source_verification, bibliography |
+| `references/evidence_grade_tracks.md` | Dual-track grade vocabulary (profile→track, clamps) | source_verification, literature_strategist |
 | `references/methodology_patterns.md` | Research design templates | research_architect |
 | `references/logical_fallacies.md` | 30+ fallacies catalog | devils_advocate |
 | `references/ethics_checklist.md` | AI disclosure, attribution, dual-use | ethics_review |
@@ -502,7 +503,7 @@ Explicit prohibitions to prevent common failure modes:
 ## Quality Standards
 
 1. ⚠️ **IRON RULE**: **Every claim must have a citation** — no unsupported assertions
-2. **Evidence hierarchy** — meta-analyses > RCTs > cohort studies > case reports > expert opinion (field-neutral baseline; grading is **discipline-relative** — a source meeting its own field's gold standard can reach Grade A even at a low design level. See `references/source_quality_hierarchy.md` §Grading Rubric + §Field-Specific Adjustments)
+2. **Evidence hierarchy** — design codes (I–VII) are descriptive; Overall grades are **claim-fitness under an EvidenceGradeTrack** (see `references/evidence_grade_tracks.md`). Under track `neutral`, Field-Specific Adjustments in `references/source_quality_hierarchy.md` apply. A source meeting its track gold standard can reach Grade A even at a low design level (e.g. Level VI ethnography under `ss_qualitative`).
 3. **Contradiction disclosure** — if sources disagree, report both sides with evidence quality comparison
 4. **Limitation transparency** — every report must have an explicit limitations section
 5. **AI disclosure** — all reports include a statement that AI-assisted research tools were used

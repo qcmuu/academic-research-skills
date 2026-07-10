@@ -34,6 +34,7 @@
 | 6 | Reflexivity / positionality advisory agent | ✅ done |
 | 7 | Reviewer discipline calibration (7a DiD/IV/RDD + 7b Dim3 + 7c qual) | ✅ done |
 | 8 | Chinese social-science ecology (CNKI / CSSCI) | ✅ done |
+| 9 | Dual-track evidence grading (P0) | ✅ done |
 
 ## Change ledger
 
@@ -103,8 +104,20 @@ Format: `[STAGE] [NEW|EDIT] path — what changed`.
 - `[NEW] academic-paper/references/chinese_writing_conventions.md` — title/abstract/keyword norms; 一二三 section numbering (vs English 1.2.3.); 基金项目 funding format with full funder names; 作者简介 first-page footnote; 中图分类号 + 文献标识码; bilingual handling; localization-error flag table.
 - `[EDIT] deep-research/agents/bibliography_agent.md` — +Chinese-language social-science row (CNKI scoped to CSSCI) + no-DOI caveat.
 
-### Final verification (all 9 stages complete)
-- 7 core CI lints green: domain-evidence, v3.6.7 pattern-protection, v3.9.2 phase-boundary (23 A + 17 B/C/D), v3.10 #134 write-scope (23 A + 17 B/C/D), spec-consistency, rubric-weight, 215-field-norm.
-- 50 mutation/contract tests pass, 1 skipped (platform).
-- Agent classification: 23 Bucket A (single-phase, fenced) + 17 Bucket B/C/D (multi/orthogonal/meta, exempt) = 40 agents total. reflexivity_agent is the 17th B/C/D agent (Bucket C, advisory).
-- One pre-existing unrelated failure: `test_check_collaboration_depth_rubric.py::test_valid_layout_passes` on Windows (path-separator `shared/` vs `shared\` in an untouched file). Not introduced by this adaptation; surfaces only on win32.
+### Stage 9 — Dual-track evidence grading (P0 residual of #246)
+- `[NEW] docs/design/2026-07-10-dual-track-evidence-grading-spec.md` — schema + document design (tracks, clamps, carriers, out-of-scope).
+- `[NEW] deep-research/references/evidence_grade_tracks.md` — canonical track vocabulary + profile→track table + gold standards + aggregation clamps.
+- `[EDIT] deep-research/references/source_quality_hierarchy.md` — design-code-only pyramid; Evidence fitness criterion; dual-track pointer; **Field-Specific Adjustments table block byte-preserved** (#259 C6 pin).
+- `[EDIT] deep-research/templates/evidence_assessment_template.md` — track / claim_class / design code vs fitness split.
+- `[EDIT] deep-research/agents/source_verification_agent.md` — remove Weight-as-authority table; track resolution; dual-track matrix.
+- `[EDIT] academic-paper/agents/literature_strategist_agent.md` — derive track after profile; no design-code ranking under ss_* / humanities.
+- `[EDIT] academic-paper/references/domain_evidence_profiles.md` — replace stale “#246 not implemented” with dual-track derivation table; keep Advisory only + #246 mention for C4.
+- `[EDIT] shared/social_science_config.md` — §8 Evidence grade track resolution.
+- `[NEW] scripts/check_evidence_grade_tracks.py` + tests — surface lint for tracks doc, mirrored tables, no Weight authority table, template fitness fields.
+- **Verified:** `check_domain_evidence_profile.py` OK (C6 pin held); `check_evidence_grade_tracks.py` OK.
+
+
+### Final verification (stages 0–9)
+- Core CI lints green including domain-evidence (C6 FSA pin unchanged) + evidence-grade-tracks.
+- Agent classification unchanged (no new agent).
+- Pre-existing unrelated Windows path-separator failure in collaboration-depth rubric test may still surface on win32.

@@ -208,6 +208,14 @@ jobs:
       - name: Validate domain evidence profile documentation surface (#259)
         run: python3 scripts/check_domain_evidence_profile.py
 
+      - name: Validate dual-track evidence grading documentation surface (social-science P0)
+        # Pins design-code ≠ weight, profile→track mirrors, source_verification no
+        # Weight authority table, template fitness fields. Spec:
+        # docs/design/2026-07-10-dual-track-evidence-grading-spec.md
+        # Mutation tests: scripts/test_check_evidence_grade_tracks.py via
+        # _ci_pytest_manifest.toml id social-science-dual-track-evidence-grade.
+        run: python3 scripts/check_evidence_grade_tracks.py
+
       - name: Check adapter docs up-to-date
         run: python3 scripts/sync_adapter_docs.py --check
 

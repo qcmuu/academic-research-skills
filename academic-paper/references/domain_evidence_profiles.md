@@ -1,6 +1,8 @@
 # Domain Evidence Profiles
 
-> **Advisory only.** A domain evidence profile changes which evidence types the literature screening *admits*. It never changes the A-F Overall Grade and never blocks manuscript ship. It never changes which databases are queried (that stays `Discipline`-driven in `literature_strategist_agent` Step 2). Consumed only by `academic-paper`'s `literature_strategist_agent`; produced by `intake_agent` Step 12 as the PCR `Domain Evidence Profile` row.
+> **Advisory only.** A domain evidence profile changes which evidence types the literature screening *admits*. It never blocks manuscript ship. It never changes which databases are queried (that stays `Discipline`-driven in `literature_strategist_agent` Step 2). Consumed only by `academic-paper`'s `literature_strategist_agent` for admission; produced by `intake_agent` Step 12 as the PCR `Domain Evidence Profile` row.
+>
+> **Grading is separate.** Profile also *derives* an `EvidenceGradeTrack` for dual-track grading (how admitted sources are scored). See Dual-track grade derivation below and `deep-research/references/evidence_grade_tracks.md`. Admission (#259) and grading (dual-track P0) must not be merged.
 
 ## Domain Evidence Profiles
 
@@ -22,7 +24,7 @@ The ship-ready enum is seven values. `unknown_user_defined` is the default and t
 
 ## Field-guidance carry-forward (seeded from the deep-research evidence hierarchy)
 
-The substance of the field-centric `## Field-Specific Adjustments` table in `deep-research/references/source_quality_hierarchy.md` is carried forward here so no per-field guidance is silently dropped. The deep-research file is **read, not edited** — this is a one-time authoring copy, not a runtime dual-read.
+The substance of the field-centric `## Field-Specific Adjustments` table in `deep-research/references/source_quality_hierarchy.md` is carried forward here so no per-field guidance is silently dropped. The deep-research Field-Specific Adjustments **table block** remains the #259 C6 pin (read-only for #259); dual-track prose lives outside that block.
 
 Normative (folded into a ship-ready profile row above):
 - **Social Science (qualitative strand)** → folded into `social_science_qualitative` (Level V-VI qualitative + archival; interpretive).
@@ -39,6 +41,24 @@ Normative (folded into a ship-ready profile row above):
 
 These two rows are preserved verbatim for the eventual `clinical` / `education` profiles. They do NOT change runtime behavior today: until those reserved profiles ship, Medicine/Health and Education runs use the neutral `unknown_user_defined` pyramid, exactly as every other unmapped selection does.
 
-## #246 forward reference
+## Dual-track grade derivation (#246 residual / social-science-track P0)
 
-Discipline-relative *grade aggregation* (how these evidence expectations roll up into an Overall Grade) is tracked separately in #246 and is **not yet implemented**. Until #246 ships, the A-F Overall Grade lookup in `deep-research/references/source_quality_hierarchy.md` applies unchanged. #259 ships no aggregation logic and no placeholder aggregation code.
+#259 ships **admission** only. Discipline-relative **grade aggregation** (the residual of #246) is implemented as **dual-track evidence grading**:
+
+- Vocabulary + clamps: `deep-research/references/evidence_grade_tracks.md`
+- Design codes + aggregation skeleton: `deep-research/references/source_quality_hierarchy.md`
+- Spec: `docs/design/2026-07-10-dual-track-evidence-grading-spec.md`
+
+**Profile → track** (derived; do not ask a second intake question):
+
+| Domain Evidence Profile (effective) | EvidenceGradeTrack |
+|---|---|
+| `social_science_qualitative` | `ss_qualitative` |
+| `social_science_quantitative` | `ss_quantitative` |
+| `communication_mixed` | strand-split or `ss_quantitative` + `[TRACK-MIXED-DEFAULT]` |
+| `general_social_science` | method-driven or `neutral` + `[TRACK-COARSE-PROFILE]` |
+| `humanities_interpretive` | `humanities` |
+| `cs_ml` | `ebm_design` |
+| `unknown_user_defined` / absent | `neutral` |
+
+Profile still **does not block ship** and does not by itself rewrite Overall letters without the tracks procedure. Track changes how A–F grades are explained and clamped; it does not replace epistemic_status (#183) or reflexivity_agent.

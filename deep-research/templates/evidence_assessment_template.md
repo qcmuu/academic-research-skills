@@ -3,6 +3,8 @@
 ## Purpose
 Per-source quality assessment card. Used by the source_verification_agent to systematically evaluate each source entering the research pipeline.
 
+**Dual-track:** Report `design_level_code` (I–VII/NA) as a **descriptive design code** and grade **Evidence fitness (A–F)** under the resolved `EvidenceGradeTrack`. Do not treat design code as Overall weight. See `deep-research/references/evidence_grade_tracks.md`.
+
 ## Assessment Card
 
 ```markdown
@@ -16,22 +18,35 @@ Per-source quality assessment card. Used by the source_verification_agent to sys
 
 ---
 
+### Track & Claim
+
+- **Evidence grade track**: [ebm_design / ss_quantitative / ss_qualitative / humanities / neutral]
+- **Claim class**: [causal_effect / descriptive_pattern / interpretive_meaning / theoretical_argument / methodological / policy_evaluative / unspecified]
+- **Track resolution**: [from Domain Evidence Profile `<profile>` / scholar declaration / neutral default]
+- **Advisories**: [none | `[NO-TRACK-NEUTRAL]` | `[TRACK-MIXED-DEFAULT]` | `[TRACK-COARSE-PROFILE]` | …]
+
+---
+
 ### Quality Assessment
 
-#### 1. Evidence Level
-**Level**: [I / II / III / IV / V / VI / VII]
-**Justification**: [why this level]
+#### 1. Design code (descriptive — not an Overall weight)
+**Design level code**: [I / II / III / IV / V / VI / VII / NA]
+**Justification**: [why this design code]
 
-#### 2. Publication Venue
+#### 2. Evidence fitness (A–F under active track)
+**Evidence fitness**: [A / B / C / D / F]
+**Justification**: [track gold-standard comparison for the claim class — not “because Level n”]
+
+#### 3. Publication Venue
 - **Journal/Publisher**: [name]
 - **Indexed in**: [Scopus / WoS / PubMed / DOAJ / other / none]
 - **Impact Factor/CiteScore**: [value or N/A]
 - **COPE member**: [Yes / No / Unknown]
 - **Predatory indicators**: [None / Flags: list]
 
-**Venue Grade**: [Excellent / Good / Adequate / Questionable / Unacceptable]
+**Venue Grade (maps to Peer Review criterion)**: [Excellent / Good / Adequate / Questionable / Unacceptable]
 
-#### 3. Author Credibility
+#### 4. Author Credibility
 - **Author(s)**: [names]
 - **Affiliation(s)**: [institutions]
 - **ORCID**: [if available]
@@ -40,16 +55,16 @@ Per-source quality assessment card. Used by the source_verification_agent to sys
 
 **Author Grade**: [Excellent / Good / Adequate / Unknown / Questionable]
 
-#### 4. Methodological Quality
+#### 5. Methodological Quality
 - **Design**: [description]
-- **Sample**: [size, selection, representativeness]
-- **Analysis**: [appropriate for design?]
+- **Sample / data adequacy** (track-conditioned): [ebm: size/representativeness · ss_quant: identification-relevant data quality · ss_qual/humanities: depth/corpus appropriateness]
+- **Analysis**: [appropriate for design and claim class?]
 - **Limitations acknowledged**: [Yes / Partially / No]
-- **Replicable**: [Yes / Partially / No]
+- **Replicable / transparent**: [Yes / Partially / No — tradition-appropriate]
 
 **Method Grade**: [Excellent / Good / Adequate / Weak / Flawed]
 
-#### 5. Currency
+#### 6. Currency
 - **Publication year**: [YYYY]
 - **Data collection period**: [if stated]
 - **Field velocity**: [Rapid / Moderate / Slow / Foundational]
@@ -57,7 +72,7 @@ Per-source quality assessment card. Used by the source_verification_agent to sys
 
 **Currency Grade**: [Current / Acceptable / Dated / Outdated / Foundational]
 
-#### 6. Conflict of Interest
+#### 7. Conflict of Interest
 - **Declared COI**: [None / Listed: details]
 - **Funding source**: [source or Not stated]
 - **Potential undeclared COI**: [None detected / Possible: details]
@@ -70,13 +85,18 @@ Per-source quality assessment card. Used by the source_verification_agent to sys
 
 | Dimension | Grade |
 |-----------|-------|
-| Evidence Level | [I-VII] |
-| Venue | [Excellent-Unacceptable] |
-| Author | [Excellent-Questionable] |
-| Method | [Excellent-Flawed] |
-| Currency | [Current-Outdated] |
-| COI | [Clean-Critical] |
+| Design code | [I–VII/NA] *(descriptive only)* |
+| Evidence fitness | [A–F] |
+| Peer Review (venue) | [A–F mapped from venue grade] |
+| Methodology | [A–F] |
+| Sample / data adequacy | [A–F] |
+| Currency | [A–F] |
+| Conflicts | [A–F] |
 | **Overall** | **[A / B / C / D / F]** |
+
+**Aggregation**: integrity floor → median of six A–F criteria → fitness +1 if Evidence fitness is A and Methodology ≠ F. Track clamps apply (`evidence_grade_tracks.md` §5). Design code is **not** a seventh median input.
+
+**Track rationale**: [one line — e.g. "ss_qualitative: trustworthiness package met; Level VI is design code only"]
 
 ### Recommendation
 - [ ] **Use as primary evidence** (Grade A-B)
@@ -96,6 +116,7 @@ Per-source quality assessment card. Used by the source_verification_agent to sys
 **Date**: [YYYY-MM-DD]
 **Sources assessed**: [N]
 **Assessor**: source_verification_agent
+**Evidence grade track** (run-level default): [track | neutral + tag]
 
 ### Grade Distribution
 | Grade | Count | % |
@@ -109,7 +130,7 @@ Per-source quality assessment card. Used by the source_verification_agent to sys
 ### Flagged Sources
 | Source | Issue | Severity | Recommendation |
 |--------|-------|----------|---------------|
-| [ref] | [issue] | [High/Medium/Low] | [Include with caveat / Exclude] |
+| [ref] | [issue] | [High/Medium/Low] | [Include with caveat / Exclude]
 
 ### Predatory Journal Alerts
 [List any flagged journals]
@@ -125,3 +146,6 @@ Per-source quality assessment card. Used by the source_verification_agent to sys
 - Minimum spot-check: 20% of sources get full card assessment
 - All Grade D/F sources require documented justification
 - Any predatory journal flag requires full verification
+- Under `ss_qualitative` / `humanities`, do not lower Overall solely because design code is VI/VII
+- Under `ss_quantitative`, do not award causal Evidence fitness A solely from design code III without identification engagement
+- Absent profile/declaration → track `neutral` and emit `[NO-TRACK-NEUTRAL]` on the run summary

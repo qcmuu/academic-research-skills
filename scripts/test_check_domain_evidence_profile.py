@@ -178,7 +178,8 @@ def test_neg_f_leak_into_deep_research(tmp_path):
     -> C6 R-5 leak guard (heading branch) fails."""
     repo = _clone_repo(tmp_path)
     p = repo / SQH
-    p.write_text(p.read_text() + "\n## Domain Evidence Profiles\nleak\n", encoding="utf-8")
+    p.write_text(p.read_text(encoding="utf-8") + "\n## Domain Evidence Profiles\nleak\n", encoding="utf-8")
+
     r = run_lint(repo)
     assert r.returncode != 0 and "C6" in r.stderr
 
@@ -263,7 +264,7 @@ def test_pos_historical_contrast_does_not_trip_c7(tmp_path):
     p = repo / CONSUMER
     # Append contrast prose far from the resolution heading range.
     p.write_text(
-        p.read_text() + "\n\n## History\nThe R1-R6 design used the Material Passport and Schema 13.\n",
+        p.read_text(encoding="utf-8") + "\n\n## History\nThe R1-R6 design used the Material Passport and Schema 13.\n",
         encoding="utf-8",
     )
     r = run_lint(repo)
@@ -333,7 +334,7 @@ def test_pos_step11_outside_nohandoff_block_does_not_trip_c8(tmp_path):
     p = repo / INTAKE
     # Append unrelated prose mentioning Step 1-11 far from the no-handoff block.
     p.write_text(
-        p.read_text() + "\n\n## Misc\nSome other flow uses Step 1-11 only, unrelated.\n",
+        p.read_text(encoding="utf-8") + "\n\n## Misc\nSome other flow uses Step 1-11 only, unrelated.\n",
         encoding="utf-8",
     )
     r = run_lint(repo)

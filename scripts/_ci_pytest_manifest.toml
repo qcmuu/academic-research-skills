@@ -99,6 +99,10 @@ id = "kong-259-domain-evidence-profile"
 path = "scripts/test_check_domain_evidence_profile.py"
 
 [[pytest]]
+id = "social-science-dual-track-evidence-grade"
+path = "scripts/test_check_evidence_grade_tracks.py"
+
+[[pytest]]
 id = "v3.10-184-evals-gold-set"
 path = "scripts/test_check_evals_gold_set.py"
 
