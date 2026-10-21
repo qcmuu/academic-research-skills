@@ -66,6 +66,43 @@ class SimilarityTest(unittest.TestCase):
     def test_completely_different_strings_score_low(self) -> None:
         self.assertLess(ts._similarity("alpha beta gamma", "xyz qrs uvw"), 0.3)
 
+    def test_non_ascii_punctuation_folds_to_whitespace(self) -> None:
+        """Em dash / curly apostrophe variants normalize identically.
+
+        `string.punctuation` is ASCII-only, so these survived normalization and
+        two spellings of the same title normalized UNEQUAL — under the #431
+        exact-title-or-bust gate that drops a legitimate match to
+        `unresolvable`."""
+        self.assertEqual(
+            ts._normalize_title("Attention Is All You Need—A Transformers Story"),
+            ts._normalize_title("Attention Is All You Need - A Transformers Story"),
+        )
+        self.assertEqual(
+            ts._normalize_title("America’s Schools"),
+            ts._normalize_title("America's Schools"),
+        )
+        self.assertTrue(
+            ts.exact_normalized_title("America’s Schools", "America's Schools"))
+
+    def test_cjk_fullwidth_punctuation_folds(self) -> None:
+        """CJK fullwidth punctuation (：，。（）) folds to whitespace.
+
+        A Chinese-language title written with fullwidth and with ASCII
+        punctuation must reach byte-equality, otherwise the exact-title gate
+        rejects a genuine match."""
+        self.assertEqual(
+            ts._normalize_title("深度学习在教育中的应用：一项元分析"),
+            ts._normalize_title("深度学习在教育中的应用:一项元分析"),
+        )
+        self.assertTrue(ts.exact_normalized_title(
+            "深度学习在教育中的应用：一项元分析",
+            "深度学习在教育中的应用:一项元分析",
+        ))
+
+    def test_non_ascii_letters_are_preserved(self) -> None:
+        """Only the punctuation class is folded — ideographs and accents stay."""
+        self.assertEqual(ts._normalize_title("Café 研究"), "café 研究")
+
 
 class ConstantsTest(unittest.TestCase):
     """Lock the magic numbers — these are protocol-level invariants, not

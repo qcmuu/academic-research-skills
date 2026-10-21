@@ -441,6 +441,32 @@ class TestDetectUncited(unittest.TestCase):
                     ),
                 )
 
+    def test_cjk_adjacent_numeric_quantifier_fires(self) -> None:
+        """A numeric quantifier directly adjacent to CJK text is a candidate.
+
+        Regression: the regex boundaries were `\\b`, which uses Unicode `\\w`,
+        so a CJK ideograph counted as a word character and no boundary fired
+        between it and a digit. Every numeric claim in a Chinese-language
+        draft was silently invisible to the detector (`共有50%的受访者` matched
+        nothing). Non-ASCII neighbours are boundaries; ASCII neighbours behave
+        exactly as before.
+        """
+        cjk_examples = [
+            ("共有50%的受访者表示满意。", "50%"),
+            ("有42名参与者退出。", "42"),
+        ]
+        for sentence, expected in cjk_examples:
+            with self.subTest(sentence=sentence):
+                is_candidate, tokens = detect_uncited(sentence)
+                self.assertTrue(
+                    is_candidate,
+                    msg=(
+                        f"CJK-adjacent quantifier {expected!r} must fire D4-c "
+                        f"condition 1 for {sentence!r}; got {tokens!r}"
+                    ),
+                )
+                self.assertIn(expected, tokens)
+
     def test_bare_number_quantifier_still_fires(self) -> None:
         """Bare integers and one-decimal numbers fire D4-c condition 1.
 

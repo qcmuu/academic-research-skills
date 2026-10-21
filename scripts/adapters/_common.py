@@ -101,7 +101,11 @@ def ensure_unique_citekey(key: str, existing: set[str]) -> str:
     """
     cleaned_chars = []
     for ch in key:
-        if ch.isalnum() or ch in "_:-":
+        # ASCII-only: str.isalnum() is True for CJK / accented letters, but the
+        # citation_key schema pattern is `^[A-Za-z][A-Za-z0-9_:-]*$`. Emitting a
+        # non-ASCII key (e.g. a CJK-name citekey from Zotero/Obsidian) produced a
+        # schema-invalid passport that only failed later at validation time.
+        if ch.isascii() and (ch.isalnum() or ch in "_:-"):
             cleaned_chars.append(ch)
     base = "".join(cleaned_chars)
     if not base or not base[0].isalpha():

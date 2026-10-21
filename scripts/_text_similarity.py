@@ -18,10 +18,40 @@ from __future__ import annotations
 
 import re
 import string
+import unicodedata
 from difflib import SequenceMatcher
 
 
+# ASCII punctuation → space. The non-ASCII counterpart is
+# `_fold_non_ascii_punctuation` below; keeping this map ASCII-only preserves the
+# pre-existing behavior for ASCII titles byte-for-byte.
 _PUNCT_TRANSLATION = str.maketrans({c: " " for c in string.punctuation})
+
+# Non-ASCII code points. Folded through `unicodedata.category` on demand rather
+# than by pre-scanning all of Unicode at import time (~370 ms): the clients
+# import this module on every run, while non-ASCII chars appear in few titles.
+_NON_ASCII = re.compile(r"[^\x00-\x7f]")
+
+
+def _fold_non_ascii_punctuation(text: str) -> str:
+    """Replace every non-ASCII punctuation char with a space.
+
+    ASCII `string.punctuation` alone is not enough for real bibliographic
+    titles: an em/en dash (`A—B`), a curly apostrophe (`America’s`), or CJK
+    fullwidth punctuation (`教育：一项研究`, `研究。`) survives it, so two
+    spellings of the same title normalize UNEQUAL. Under the #431
+    exact-title-or-bust gate that drops a legitimate match to `unresolvable`.
+
+    `unicodedata.category` P* covers the fullwidth ASCII-equivalent forms
+    (`：` `，` `（`), dashes (`—` `–`), and quote marks (`“` `”` `‘` `’`).
+    Non-punctuation non-ASCII (CJK ideographs, accented letters) is preserved
+    verbatim — only the punctuation class is folded, and since this can only
+    ADD equalities it never regresses an existing match.
+    """
+    def _fold(match: re.Match[str]) -> str:
+        ch = match.group(0)
+        return " " if unicodedata.category(ch).startswith("P") else ch
+    return _NON_ASCII.sub(_fold, text)
 
 # #431 §0.1: collapse a run of two-or-more `<letter>.` units at a word boundary
 # (`R.A.G.` → `RAG`) BEFORE punctuation→whitespace, so a dotted acronym and its
@@ -46,7 +76,7 @@ def _normalize_title(s: str) -> str:
     of punctuation' before computing similarity. Punctuation becomes
     whitespace so token boundaries are preserved, then collapse runs of
     whitespace. The byte-equivalent base form for every non-dotted title."""
-    cleaned = s.lower().translate(_PUNCT_TRANSLATION)
+    cleaned = _fold_non_ascii_punctuation(s.lower()).translate(_PUNCT_TRANSLATION)
     return " ".join(cleaned.split())
 
 
