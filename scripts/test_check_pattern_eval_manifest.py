@@ -165,7 +165,13 @@ def _run_script(fixture_root: Path) -> subprocess.CompletedProcess:
     target.parent.mkdir(parents=True, exist_ok=True)
     if target.exists() or target.is_symlink():
         target.unlink() if target.is_symlink() else shutil.rmtree(target)
-    target.symlink_to(fixture_root, target_is_directory=True)
+    # A symlink is the cheapest way to expose the synthetic root, but Windows
+    # without Developer Mode raises WinError 1314 on os.symlink. The validator
+    # only reads the tree, so a plain copy is behaviourally equivalent.
+    try:
+        target.symlink_to(fixture_root, target_is_directory=True)
+    except (OSError, NotImplementedError):
+        shutil.copytree(fixture_root, target)
     return subprocess.run(
         [sys.executable, str(repo_clone / "scripts" / SCRIPT.name)],
         capture_output=True,

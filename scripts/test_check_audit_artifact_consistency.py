@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import copy
 import json
+import os
 import re
 import subprocess
 import sys
@@ -1940,6 +1941,15 @@ class TestCLI:
         # End-to-end smoke: invoke the script directly (no `python` prefix)
         # and confirm it produces the documented harness exit code. Belt
         # and braces against future `chmod 644` regressions.
+        #
+        # This exercises the POSIX execute bit + shebang. Windows has neither:
+        # the exec bit is not modelled and a .py file is not directly
+        # executable, so there is nothing for the assertion to check.
+        if os.name == "nt":
+            pytest.skip(
+                "direct execution relies on the POSIX exec bit and shebang; "
+                "Windows cannot run a .py path without an interpreter"
+            )
         script_path = REPO / "scripts/check_audit_artifact_consistency.py"
         result = subprocess.run(
             [str(script_path), "--example-validation-harness"],

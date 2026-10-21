@@ -397,6 +397,11 @@ class LauncherHangingCandidateTest(unittest.TestCase):
                              "watchdog must kill the hanging py and fall through to python3")
 
 
+@unittest.skipIf(
+    os.name == "nt",
+    "the launcher is a POSIX /bin/sh script; shims such as "
+    "`#!/bin/sh` cannot be executed on Windows",
+)
 class LauncherWatchdogRobustnessTest(unittest.TestCase):
     """Round-6 gemini track: the no-`timeout` watchdog must not fail OPEN under (a) a private-
     temp allocation failure or (b) the pid-reuse race that would false-report a timeout."""
