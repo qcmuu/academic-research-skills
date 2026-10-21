@@ -86,8 +86,19 @@ CAUSAL_TRIGGERS = [
 ]
 
 MONTH_TO_NUM = {name.lower(): f"{i+1:02d}" for i, name in enumerate(MONTH_NAMES.split("|"))}
-LAST_DAY = {"01": "31", "02": "28", "03": "31", "04": "30", "05": "31", "06": "30",
-            "07": "31", "08": "31", "09": "30", "10": "31", "11": "30", "12": "31"}
+# Days per month, indexed by 1-based month number. February is resolved per-year
+# in _last_day (leap years), NOT pinned to 28: a fixed 28 ended a `February 2024`
+# interval on 2024-02-28, so a legitimate 2024-02-29 event compared as "after"
+# the month and produced a blocking TEMPORAL-ARITHMETIC-IMPOSSIBLE HIGH finding.
+_DAYS_IN_MONTH = (0, 31, 0, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
+
+
+def _last_day(year: int, month: int) -> str:
+    """Last calendar day of (year, month), leap-year-correct."""
+    if month == 2:
+        leap = year % 4 == 0 and (year % 100 != 0 or year % 400 == 0)
+        return "29" if leap else "28"
+    return f"{_DAYS_IN_MONTH[month]:02d}"
 
 
 def _date_to_interval(raw: str) -> tuple[str, str]:
@@ -116,17 +127,17 @@ def _date_to_interval(raw: str) -> tuple[str, str]:
     # Month precision: YYYY-MM (v3.9.4.1 hotfix)
     m_month = re.fullmatch(r"(\d{4})-(\d{2})", raw)
     if m_month:
-        yr = m_month.group(1)
-        mo = m_month.group(2)
-        if mo not in LAST_DAY:
+        yr = int(m_month.group(1))
+        mo = int(m_month.group(2))
+        if not 1 <= mo <= 12:
             raise ValueError(f"invalid month in date: {raw!r}")
-        return f"{yr}-{mo}-01", f"{yr}-{mo}-{LAST_DAY[mo]}"
+        return f"{yr}-{mo:02d}-01", f"{yr}-{mo:02d}-{_last_day(yr, mo)}"
     # Prose form: "MonthName YYYY"
     m = re.fullmatch(r"(" + MONTH_NAMES + r")\s+(\d{4})", raw, re.IGNORECASE)
     if m:
-        mo = MONTH_TO_NUM[m.group(1).lower()]
-        yr = m.group(2)
-        return f"{yr}-{mo}-01", f"{yr}-{mo}-{LAST_DAY[mo]}"
+        mo = int(MONTH_TO_NUM[m.group(1).lower()])
+        yr = int(m.group(2))
+        return f"{yr}-{mo:02d}-01", f"{yr}-{mo:02d}-{_last_day(yr, mo)}"
     # Year precision: YYYY
     if re.fullmatch(r"(?:19|20)\d{2}", raw):
         return f"{raw}-01-01", f"{raw}-12-31"
@@ -140,15 +151,40 @@ def _date_diff_days(a: str, b: str) -> int:
     return (da - db).days
 
 
+# A sentence terminator, optionally trailed by inline HTML comments, then the
+# whitespace (or end of text) that closes the sentence.
+_SENTENCE_END = re.compile(r"[.!?](?:\s*<!--[^>]*-->)*(\s|$)")
+
+
+def _last_sentence_break(text: str) -> int:
+    """Index just past the last sentence terminator in text (0 if none)."""
+    last_end = 0
+    for m in re.finditer(r"[.!?]\s+", text):
+        last_end = m.end()
+    return last_end
+
+
 def _sentence_around(draft: str, char_pos: int) -> str:
-    """Extract the sentence containing char_pos."""
+    """Extract the sentence containing char_pos.
+
+    The left boundary is the last `.`/`!`/`?` followed by whitespace (or the
+    start of the draft); the right boundary is the first such terminator at or
+    after char_pos. An anchored search is used rather than the previous
+    reversed-string trick: reversing the prefix puts the terminator at the END
+    of the reversed text, where the trailing-space requirement of
+    `[.!?]\\s+` has nothing left to consume, so the search never matched and
+    every multi-sentence draft reported the whole prefix as the sentence.
+
+    A terminator may be followed by one or more `<!--...-->` comments before
+    its whitespace: the v3.7.3 citation markers are emitted as
+    `sentence.<!--ref:slug-->`, so requiring whitespace directly after the
+    `.` skipped the true sentence end and swallowed the NEXT sentence into the
+    locator excerpt.
+    """
     pre = draft[:char_pos]
     post = draft[char_pos:]
-    # Find last sentence terminator before char_pos
-    m_pre = re.search(r"[.!?]\s+(?=\S)", pre[::-1])
-    start = char_pos - m_pre.start() if m_pre else 0
-    # Find next sentence terminator at/after char_pos
-    m_post = re.search(r"[.!?](\s|$)", post)
+    start = _last_sentence_break(pre)
+    m_post = _SENTENCE_END.search(post)
     end = char_pos + m_post.end() if m_post else len(draft)
     return draft[start:end].strip()
 
@@ -823,16 +859,19 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--audit-run-id", required=True)
     args = parser.parse_args(argv)
 
-    draft = args.draft.read_text()
-    timeline = yaml.safe_load(args.timeline.read_text())
-    citation_provenance = yaml.safe_load(args.citation_provenance.read_text())
+    # Explicit UTF-8: the default text encoding is locale-dependent (cp1252 /
+    # gbk on Windows), and a draft carrying CJK or curly quotes would otherwise
+    # raise UnicodeDecodeError instead of producing findings.
+    draft = args.draft.read_text(encoding="utf-8")
+    timeline = yaml.safe_load(args.timeline.read_text(encoding="utf-8"))
+    citation_provenance = yaml.safe_load(args.citation_provenance.read_text(encoding="utf-8"))
 
     result = audit(draft, timeline, citation_provenance,
                    args.report_reference_date, args.audit_run_id)
 
-    args.output.write_text(yaml.safe_dump(result, sort_keys=False))
+    args.output.write_text(yaml.safe_dump(result, sort_keys=False), encoding="utf-8")
     if args.markdown_output:
-        args.markdown_output.write_text(_render_markdown(result))
+        args.markdown_output.write_text(_render_markdown(result), encoding="utf-8")
     return 0
 
 
