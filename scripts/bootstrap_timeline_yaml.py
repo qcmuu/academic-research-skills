@@ -85,7 +85,15 @@ def _bootstrap_entry(entry: dict, dry_run: bool) -> dict:
         # provenance points at the URL actually queried (DOIs contain '/' and
         # may carry reserved characters).
         quoted_doi = urllib.parse.quote(doi, safe="")
-        issued = crossref_data.get("issued", {}).get("date-parts", [[None]])[0]
+        # Crossref shapes `issued` as an object, but a metadata-poor record can
+        # carry `issued: null` (or omit date-parts) — `.get` on the null then
+        # raised AttributeError and aborted the whole bootstrap instead of
+        # falling back to the corpus year for this one entry.
+        issued_block = crossref_data.get("issued") or {}
+        date_parts = (
+            issued_block.get("date-parts") if isinstance(issued_block, dict) else None
+        ) or [[None]]
+        issued = date_parts[0]
         if issued and issued[0]:
             precision_map = {1: "year", 2: "month", 3: "day"}
             precision = precision_map.get(len(issued), "year")
@@ -129,7 +137,10 @@ def main(argv: list[str] | None = None) -> int:
                         help="Skip API and pdftotext calls (use corpus year fallback)")
     args = parser.parse_args(argv)
 
-    corpus_data = yaml.safe_load(args.corpus.read_text())
+    # Explicit UTF-8 on both ends: the corpus YAML routinely carries CJK titles,
+    # and the locale-default codec (cp1252 / gbk on Windows) would raise
+    # UnicodeDecodeError mid-bootstrap instead of falling back per entry.
+    corpus_data = yaml.safe_load(args.corpus.read_text(encoding="utf-8"))
     entries = corpus_data.get("literature_corpus", [])
     sources = [_bootstrap_entry(e, args.dry_run) for e in entries]
 
@@ -138,7 +149,10 @@ def main(argv: list[str] | None = None) -> int:
         "sources": sources,
         "events": [],
     }
-    args.output.write_text(yaml.safe_dump(timeline, sort_keys=False))
+    args.output.write_text(
+        yaml.safe_dump(timeline, sort_keys=False, allow_unicode=True),
+        encoding="utf-8",
+    )
     return 0
 
 
