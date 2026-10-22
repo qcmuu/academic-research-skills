@@ -91,6 +91,11 @@ def _safe_load_yaml(path: Path) -> tuple[Any, str | None]:
         return None, f"{path}: malformed YAML: {e}"
     except OSError as e:
         return None, f"{path}: cannot read file: {e}"
+    except UnicodeDecodeError as e:
+        # A passport saved in a legacy single-byte encoding (cp1252 / gbk) is a
+        # malformed input, not a crash: report it like any other parse error so
+        # the lint exits 1 with a diagnosis instead of a traceback.
+        return None, f"{path}: not valid UTF-8: {e}"
 
 
 def validate_passport(

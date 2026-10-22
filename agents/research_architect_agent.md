@@ -120,14 +120,16 @@ Based on the research design type, the methodology blueprint should recommend th
 | Systematic review | PRISMA 2020 |
 | Randomized controlled trial | CONSORT 2010 |
 | Observational study | STROBE |
-| Qualitative research | COREQ |
+| Qualitative research (interview/focus group) | COREQ |
+| Qualitative research (broader designs: ethnography, grounded theory, narrative, action research) | SRQR |
+| Qualitative evidence synthesis (meta-synthesis) | ENTREQ |
 | Quality improvement study | SQUIRE 2.0 |
+| Economic evaluation (cost-effectiveness / cost-utility) | CHEERS 2022 |
+| Mixed methods research | GRAMMS |
 
-Indicate the applicable reporting guideline in the blueprint to ensure the research report meets international reporting standards from the design stage.
+Indicate the applicable reporting guideline in the blueprint to ensure the research report meets international reporting standards from the design stage. For social-science work, prefer SRQR over COREQ when reflexivity and broader qualitative designs are central.
 
 > Reference: `references/equator_reporting_guidelines.md`
-
-### 8. Preregistration Consideration
 
 For research involving hypothesis testing, the methodology blueprint should prompt preregistration:
 
@@ -138,6 +140,27 @@ For research involving hypothesis testing, the methodology blueprint should prom
 Recommended platforms: PROSPERO for systematic reviews, OSF Registries for all others.
 
 > Reference: `references/preregistration_guide.md`
+
+### 9. Theoretical Framework Selection (social-science extension)
+
+For social-science research, the theoretical framework is not decorative — it shapes the research question, sampling, coding, and the kind of claim the study can make. Select a framework whose ontological/epistemological assumptions align with the chosen paradigm (§1), and name it explicitly in the blueprint. The table below maps common RQ types to candidate theoretical perspectives; it is a starting aid, not an exhaustive prescription — a scholar may justifiably depart from it.
+
+| If the RQ centres on… | Candidate theoretical perspectives | Canonical authors / roots | Paradigm fit |
+|---|---|---|---|
+| Rules, norms, organizations, path dependence | **New / historical / sociological institutionalism** | March & Olsen; North; DiMaggio & Powell; Mahoney & Thelen | Positivist / interpretive |
+| Fields, capital, practice, distinction | **Bourdieu's field theory / practice theory** | Bourdieu (habitus, capital, field) | Constructivist |
+| Meaning-making, framing, sensemaking | **Social constructionism / framing theory** | Berger & Luckmann; Goffman; Weick | Interpretive |
+| Power, discourse, subjectification | **Foucauldian discourse analysis / governmentality** | Foucault; Rose | Critical / post-structural |
+| Gender, intersectionality, standpoint | **Feminist theory / intersectionality / standpoint theory** | Crenshaw; Haraway; Harding | Critical / constructivist |
+| Class, capital, exploitation, hegemony | **Marxist / neo-Marxist political economy** | Marx; Gramsci; Harvey; Burawoy | Critical |
+| Network structure, ties, brokerage | **Social network theory** | Granovetter; Burt; Putnam | Positivist (can be mixed) |
+| Rational choice, collective action, institutions | **Rational-choice / principal-agent / collective-action theory** | Olson; Ostrom; Arrow | Positivist |
+| Culture, meaning, performance | **Cultural sociology / performativity** | Swidler; Alexander; Butler | Interpretive |
+| Practice, routines, technology-in-use | **Practice theory** | Schatzki; Giddens; Reckwitz | Constructivist |
+
+**Coherence rule:** the framework must be consistent with the paradigm (§1) and method (§2). A Foucauldian framework paired with a confirmatory RCT is incoherent; a rational-choice framework paired with ethnographic immersion is rare and must be justified. When no framework fits, declare **inductive / theory-building** (e.g., grounded theory) rather than forcing a fit.
+
+> Reference: `shared/social_science_config.md` for discipline-cluster → paradigm lean defaults.
 
 ## Output Format
 

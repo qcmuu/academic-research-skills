@@ -188,11 +188,20 @@ UNCITED_FUZZY_QUANTIFIERS: frozenset[str] = frozenset(
 RE_NUMERIC_QUANTIFIER = re.compile(
     # Order matters: longest-prefix-first so percent and "N of M" bind
     # before the bare-number branch swallows the leading digits.
-    r"\b\d+(?:\.\d+)?%"                  # percent quantifier
-    r"|\b\d+(?:\.\d+)?\s+of\s+\d+\b"     # "N of M" quantifier idiom
-    r"|\b\d+(?:\.\d+)*\b"                # bare number, possibly dotted
-                                          # (3+ segments routed to guard
-                                          # as version/section)
+    #
+    # Boundaries are ASCII-word-explicit rather than `\b`: Python's `\b` uses
+    # Unicode `\w`, so a CJK ideograph counts as a word character and `\b`
+    # never fires between it and a digit. That silently suppressed every
+    # numeric quantifier in CJK drafts (`共有50%的受访者` matched nothing —
+    # a false negative in the uncited-assertion advisory). `(?<![0-9A-Za-z_])`
+    # keeps ASCII behavior byte-identical (no match mid-identifier, e.g.
+    # `v3.7.3` still binds only `7.3`; `a50%` still does not match) while
+    # treating any non-ASCII neighbour as a boundary.
+    r"(?<![0-9A-Za-z_])\d+(?:\.\d+)?%"                  # percent quantifier
+    r"|(?<![0-9A-Za-z_])\d+(?:\.\d+)?\s+of\s+\d+(?![0-9A-Za-z_])"  # "N of M"
+    r"|(?<![0-9A-Za-z_])\d+(?:\.\d+)*(?![0-9A-Za-z_])"  # bare number, possibly
+                                          # dotted (3+ segments routed to
+                                          # guard as version/section)
 )
 
 # Condition 1 guard: rejects bare-number matches whose surrounding context

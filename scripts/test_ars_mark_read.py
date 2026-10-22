@@ -132,6 +132,11 @@ class TestMarkReadFailFast(unittest.TestCase):
 
     def test_passport_parent_unreadable_fails(self) -> None:
         """Fail-fast mode 3: passport parent directory lacks R_OK."""
+        if not hasattr(os, "geteuid"):
+            self.skipTest(
+                "POSIX permission bits are not enforced on this platform "
+                "(Windows chmod only toggles the read-only attribute)"
+            )
         if os.geteuid() == 0:
             self.skipTest("root bypasses POSIX permissions")
         with TemporaryDirectory() as tmp:
@@ -161,6 +166,11 @@ class TestMarkReadFailFast(unittest.TestCase):
     def test_readlog_unwritable_fails(self) -> None:
         """Fail-fast mode 4: read-log parent (== passport parent) lacks W_OK.
         Spec §3.6 R5-003: refuse to write when target is unwritable."""
+        if not hasattr(os, "geteuid"):
+            self.skipTest(
+                "POSIX permission bits are not enforced on this platform "
+                "(Windows chmod only toggles the read-only attribute)"
+            )
         if os.geteuid() == 0:
             self.skipTest("root bypasses POSIX permissions")
         with TemporaryDirectory() as tmp:

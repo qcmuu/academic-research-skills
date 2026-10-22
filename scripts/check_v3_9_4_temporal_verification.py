@@ -39,7 +39,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 SCHEMAS = REPO_ROOT / "shared/contracts/passport"
 
 BIBLIOGRAPHY_AGENT_PATH = REPO_ROOT / "deep-research/agents/bibliography_agent.md"
-BIBLIOGRAPHY_AGENT_SHA256 = "39370675561f74fae9a8595bdeb03939402d273a0734b6bcaa1230d5e9928616"  # #489 harness-retirement baseline (B4-F01); F2 ownership guard per spec §3.4 + §3.6. The B4-F01 apply rewrote ONLY the Phase Boundary enforcement-status sentence (stale "hook deferred to #134" claim → post-PR-#294 two-layer reality); NO M6 citation-provenance / M5 version-family / temporal logic added, so the ownership invariant the hash protects is intact. (Previous baseline 4d8bee06… was the #272 guidance-layer state.)
+BIBLIOGRAPHY_AGENT_SHA256 = "79f3e23de51c1c7efc9d1a147634404a1e1ae3b12718e5e42f7c9ff9b64c6fd4"  # social-science-track baseline; F2 ownership guard per spec §3.4 + §3.6. Re-baselined after 6e3c973 (stage3: social-science database search protocols + bibliography wiring) and 1d72498 (stage8: CNKI/CSSCI discovery layer — adds the Chinese-language social-science row to the Step 2.0 database-selection table plus the no-DOI `obtained_via: cnki_institutional` caveat). Both commits touched ONLY the discovery-database selection layer; no M6 citation-provenance, M5 version-family, or temporal logic was added, so the ownership invariant this hash protects is intact. (Previous baseline 3937… was the #489 harness-retirement state.)
 
 
 def _validate(yaml_path: Path, schema_path: Path) -> list[str]:
@@ -48,8 +48,8 @@ def _validate(yaml_path: Path, schema_path: Path) -> list[str]:
     if not schema_path.exists():
         return [f"missing schema: {schema_path}"]
     try:
-        data = yaml.safe_load(yaml_path.read_text())
-        schema = json.loads(schema_path.read_text())
+        data = yaml.safe_load(yaml_path.read_text(encoding="utf-8"))
+        schema = json.loads(schema_path.read_text(encoding="utf-8"))
         jsonschema.validate(data, schema)
         return []
     except jsonschema.ValidationError as exc:
@@ -67,7 +67,7 @@ def _check_supersession_cycles(timeline_path: Path) -> list[str]:
     if not timeline_path.exists():
         return []
     try:
-        data = yaml.safe_load(timeline_path.read_text())
+        data = yaml.safe_load(timeline_path.read_text(encoding="utf-8"))
     except Exception:
         return []  # schema validation handles parse errors
     sources = {s["citation_key"]: s for s in data.get("sources", []) if "citation_key" in s}

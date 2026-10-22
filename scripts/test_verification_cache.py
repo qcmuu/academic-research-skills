@@ -211,3 +211,52 @@ def test_non_dict_payload_is_miss(tmp_path, monkeypatch):
     conn.close()
 
     assert c.get("list2024", "crossref", "10.5555/list") is None
+
+
+def test_malformed_timestamp_is_miss(tmp_path, monkeypatch):
+    """A row whose verification_timestamp is not an ISO datetime is a miss.
+
+    Same contract as the payload cases above ('malformed cache entry = miss'):
+    `_is_expired` calls `datetime.fromisoformat`, which raises ValueError on a
+    hand-edited / foreign-tool stamp. Letting that escape aborted the whole
+    verification run on one bad row instead of re-resolving it."""
+    from verification_cache import VerificationCache
+
+    db = tmp_path / "verification.db"
+    monkeypatch.setenv("ARS_VERIFICATION_CACHE_PATH", str(db))
+    c = VerificationCache()
+    c.put("badstamp2024", "crossref", "10.5555/stamp", {"matched": True})
+
+    conn = sqlite3.connect(str(db))
+    conn.execute(
+        "UPDATE verification_cache SET verification_timestamp = ? WHERE citation_key = ?",
+        ("not-a-timestamp", "badstamp2024"),
+    )
+    conn.commit()
+    conn.close()
+
+    assert c.get("badstamp2024", "crossref", "10.5555/stamp") is None
+
+
+def test_naive_timestamp_does_not_raise(tmp_path, monkeypatch):
+    """A tz-naive stamp (no `+00:00`) compares against the aware 'now'.
+
+    `put` always writes an aware UTC stamp, so a naive one means the row came
+    from elsewhere. It must not raise TypeError (aware vs naive subtraction);
+    reading it as UTC is the closest correct interpretation."""
+    from verification_cache import VerificationCache
+
+    db = tmp_path / "verification.db"
+    monkeypatch.setenv("ARS_VERIFICATION_CACHE_PATH", str(db))
+    c = VerificationCache()
+    c.put("naive2024", "crossref", "10.5555/naive", {"matched": True})
+
+    conn = sqlite3.connect(str(db))
+    conn.execute(
+        "UPDATE verification_cache SET verification_timestamp = ? WHERE citation_key = ?",
+        ("2024-01-01T00:00:00", "naive2024"),  # long past TTL -> a miss, no crash
+    )
+    conn.commit()
+    conn.close()
+
+    assert c.get("naive2024", "crossref", "10.5555/naive") is None

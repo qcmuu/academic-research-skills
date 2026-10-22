@@ -276,7 +276,9 @@ def test_audit_writes_markdown_report(tmp_path):
     assert result.returncode == 0, f"stderr={result.stderr}"
     assert out_yaml.exists()
     assert out_md.exists()
-    md = out_md.read_text()
+    # The verifier writes UTF-8 (locale-independent); read it back explicitly so
+    # this assertion does not re-introduce the cp1252/gbk default it just fixed.
+    md = out_md.read_text(encoding="utf-8")
     assert "# Temporal Audit Results" in md
     assert "TEMPORAL-DEICTIC" in md
 
@@ -349,7 +351,13 @@ _AUDIT_SPEC.loader.exec_module(_audit_mod)
     ("March 2025", ("2025-03-01", "2025-03-31")),
     # v3.9.4.1 hotfix: month precision YYYY-MM
     ("2024-09", ("2024-09-01", "2024-09-30")),
-    ("2024-02", ("2024-02-01", "2024-02-28")),
+    # Leap years: 2024-02 has 29 days, 2023-02 has 28. A fixed-28 February
+    # truncated the interval and turned a legitimate 2024-02-29 event into a
+    # blocking TEMPORAL-ARITHMETIC-IMPOSSIBLE HIGH finding.
+    ("2024-02", ("2024-02-01", "2024-02-29")),
+    ("2023-02", ("2023-02-01", "2023-02-28")),
+    ("February 2024", ("2024-02-01", "2024-02-29")),
+    ("February 2023", ("2023-02-01", "2023-02-28")),
     ("2024-12", ("2024-12-01", "2024-12-31")),
     # v3.9.4.1 hotfix: interval precision YYYY-MM-DD..YYYY-MM-DD
     ("2022-04-01..2022-12-31", ("2022-04-01", "2022-12-31")),

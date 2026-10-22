@@ -40,6 +40,38 @@ TARGET_AGENT = REPO_ROOT / "deep-research" / "agents" / "synthesis_agent.md"
 PROTECTION_MARKER = "## PATTERN PROTECTION (v3.6.7)"
 
 
+def _pr_base_sharing_history() -> str | None:
+    """Return a local branch name that shares history with HEAD, else None.
+
+    The guard resolves its PR base through `GITHUB_BASE_REF` and then needs
+    `git merge-base <base> HEAD`. CI always has that (the PR base is an
+    ancestor); a developer checkout may not — e.g. a branch imported from
+    another remote with no common ancestor. Probing keeps the test honest in
+    both environments instead of asserting against a base that cannot
+    resolve.
+    """
+    listing = subprocess.run(
+        ["git", "branch", "-r", "--format=%(refname:short)"],
+        cwd=REPO_ROOT, capture_output=True, text=True, check=False,
+    )
+    if listing.returncode != 0:
+        return None
+    for name in listing.stdout.splitlines():
+        name = name.strip()
+        if not name or name.startswith("("):
+            continue
+        if not name.startswith("origin/"):
+            continue
+        mb = subprocess.run(
+            ["git", "merge-base", name, "HEAD"],
+            cwd=REPO_ROOT, capture_output=True, text=True, check=False,
+        )
+        if mb.returncode == 0 and mb.stdout.strip():
+            # GITHUB_BASE_REF is joined with "origin/", so strip the prefix.
+            return name[len("origin/"):]
+    return None
+
+
 def _run_lint() -> subprocess.CompletedProcess[str]:
     """Run the v3.6.8 lint as a subprocess (so its sys.exit propagates)."""
     return subprocess.run(
@@ -100,7 +132,7 @@ def test_mutation_inside_v3_6_7_block_fails() -> None:
         # Inject a stray space at end of the marker line (still inside block).
         nl = text.index("\n", pos)
         mutated = text[:nl] + " " + text[nl:]
-        TARGET_AGENT.write_text(mutated, encoding="utf-8")
+        TARGET_AGENT.write_text(mutated, encoding="utf-8", newline="")
 
         result = _run_lint()
         assert result.returncode == 1
@@ -131,7 +163,7 @@ def test_appending_new_h2_directly_after_eof_newline_passes() -> None:
         # NO leading "\n\n" — that would expand the v3.6.7 block range.
         assert text.endswith("\n"), "fixture assumption (file ends with newline) violated"
         appended = text + "## Two-Layer Citation Emission (v3.7.1 placeholder)\n\nbody\n"
-        TARGET_AGENT.write_text(appended, encoding="utf-8")
+        TARGET_AGENT.write_text(appended, encoding="utf-8", newline="")
         result = _run_lint()
         assert result.returncode == 0, (
             f"Appending H2 directly after EOF newline must keep byte-"
@@ -175,7 +207,7 @@ def test_inserting_blank_line_between_v367_and_step3a_blocks_fails() -> None:
         # The extra "\n" falls inside the v3.6.7 extractor's range
         # (v3.6.7 block is text[v367_pos : step3a_heading_line_start]).
         mutated = text[:idx] + "\n" + text[idx:]
-        TARGET_AGENT.write_text(mutated, encoding="utf-8")
+        TARGET_AGENT.write_text(mutated, encoding="utf-8", newline="")
         result = _run_lint()
         assert result.returncode == 1, (
             "Inserting a blank line between v3.6.7 and Step 3a blocks must "
@@ -192,7 +224,7 @@ def test_v3_6_8_manifest_scope_must_be_correct() -> None:
     with _Snapshot(V3_6_8_MANIFEST):
         data = json.loads(V3_6_8_MANIFEST.read_text(encoding="utf-8"))
         data["scope"] = "v3.6.7-only"  # wrong — this is v3.6.8 manifest
-        V3_6_8_MANIFEST.write_text(json.dumps(data), encoding="utf-8")
+        V3_6_8_MANIFEST.write_text(json.dumps(data), encoding="utf-8", newline="")
         result = _run_lint()
         assert result.returncode == 1
         assert "v3.6.8-only" in result.stdout
@@ -280,7 +312,7 @@ def test_heading_prefix_mutation_is_caught() -> None:
             1,
         )
         assert mutated != text, "heading-mutation fixture failed to apply"
-        TARGET_AGENT.write_text(mutated, encoding="utf-8")
+        TARGET_AGENT.write_text(mutated, encoding="utf-8", newline="")
         result = _run_lint()
         assert result.returncode == 1, (
             "Heading-prefix mutation must be caught by the SHA gate "
@@ -477,7 +509,14 @@ def test_anti_self_baseline_guard_rejects_manifest_mutation_in_pr(monkeypatch) -
     resolution may fail; this test injects the env var so the guard's
     real reject path is exercised regardless of trigger event.
     """
-    monkeypatch.setenv("GITHUB_BASE_REF", "main")
+    base = _pr_base_sharing_history()
+    if base is None:
+        pytest.skip(
+            "no branch shares history with HEAD, so the anti-self-baseline "
+            "guard cannot compute a merge-base and correctly falls back to "
+            "advisory mode"
+        )
+    monkeypatch.setenv("GITHUB_BASE_REF", base)
     with _Snapshot(V3_6_7_MANIFEST):
         text = V3_6_7_MANIFEST.read_text(encoding="utf-8")
         # Mutate `rationale_doc` so the byte-equivalence check fires while
@@ -489,7 +528,7 @@ def test_anti_self_baseline_guard_rejects_manifest_mutation_in_pr(monkeypatch) -
             1,
         )
         assert mutated != text, "mutation fixture failed to apply"
-        V3_6_7_MANIFEST.write_text(mutated, encoding="utf-8")
+        V3_6_7_MANIFEST.write_text(mutated, encoding="utf-8", newline="")
 
         result = _run_lint()
         assert result.returncode == 1, (
@@ -537,6 +576,11 @@ def test_anti_self_baseline_guard_history_scan_called(monkeypatch) -> None:
             and args[1] == "--format=%H"
         ):
             return 0, fake_log_output, ""
+        # This test targets the history-scan layer, so its own preconditions
+        # must not depend on the developer's local branch topology: feed the
+        # guard a synthetic merge-base and matching HEAD-side bytes.
+        if args and args[0] == "merge-base":
+            return 0, "0123456789abcdef0123456789abcdef01234567", ""
         return real_run_git(args, cwd=cwd) if cwd is not None else real_run_git(args)
 
     monkeypatch.setattr(mod, "_run_git", patched_run_git)
@@ -558,7 +602,7 @@ def test_v3_6_7_marker_removed_at_head_fails() -> None:
         # Replace marker text so the case-insensitive find returns -1.
         mutated = text.replace(PROTECTION_MARKER, "## (former pattern protection heading)")
         assert mutated != text, "test fixture failed to apply mutation"
-        TARGET_AGENT.write_text(mutated, encoding="utf-8")
+        TARGET_AGENT.write_text(mutated, encoding="utf-8", newline="")
         result = _run_lint()
         assert result.returncode == 1
         assert "marker missing at PR HEAD" in result.stdout
@@ -684,7 +728,7 @@ def test_step3a_invariant_i_two_layer_form_required() -> None:
         assert mutated_scope != block_scope, (
             "block must contain at least one `<!--ref:` literal (invariant i)"
         )
-        target.write_text(text[:block_pos] + mutated_scope + text[block_end:], encoding="utf-8")
+        target.write_text(text[:block_pos] + mutated_scope + text[block_end:], encoding="utf-8", newline="")
         result = _run_lint()
         assert result.returncode == 1, (
             "Removing `<!--ref:` from the block must trigger invariant (i) "
@@ -710,7 +754,7 @@ def _inject_into_block_body(target: Path, injection: str) -> None:
         f"fixture missing two-layer block in {target.name}"
     )
     eol = text.index("\n", block_pos)
-    target.write_text(text[: eol + 1] + injection + text[eol + 1:], encoding="utf-8")
+    target.write_text(text[: eol + 1] + injection + text[eol + 1:], encoding="utf-8", newline="")
 
 
 def test_step3a_invariant_ii_finalizer_mention_forbidden() -> None:
@@ -774,7 +818,7 @@ def test_step3a_invariant_iii_frontmatter_read_instruction_forbidden() -> None:
             + "\n\nBefore emitting, read the entry frontmatter to look up the slug.\n"
             + text[nl:]
         )
-        target.write_text(mutated, encoding="utf-8")
+        target.write_text(mutated, encoding="utf-8", newline="")
         result = _run_lint()
         assert result.returncode == 1, (
             "A frontmatter-read instruction inside the block must trigger "
@@ -799,7 +843,7 @@ def test_step3a_block_missing_from_manifest_agent_fails() -> None:
             "## (former two-layer block heading)",
             1,
         )
-        target.write_text(mutated, encoding="utf-8")
+        target.write_text(mutated, encoding="utf-8", newline="")
         result = _run_lint()
         assert result.returncode == 1, (
             "Block absence from manifest agent must hard-fail; "
@@ -831,7 +875,7 @@ def test_step3a_invariant_iii_unrelated_negation_does_not_bless_read_instruction
             "to find the slug.\n"
         )
         mutated = text[: nl] + injection + text[nl:]
-        target.write_text(mutated, encoding="utf-8")
+        target.write_text(mutated, encoding="utf-8", newline="")
         result = _run_lint()
         assert result.returncode == 1, (
             "R1 P1-2: a sentence with unrelated negation must NOT bless a "
@@ -851,7 +895,7 @@ def test_step3a_invariant_iii_front_matter_two_word_variant_caught() -> None:
         nl = text.index("\n", block_pos)
         injection = "\n\nIf needed, read the entry's front matter for the slug.\n"
         mutated = text[: nl] + injection + text[nl:]
-        target.write_text(mutated, encoding="utf-8")
+        target.write_text(mutated, encoding="utf-8", newline="")
         result = _run_lint()
         assert result.returncode == 1, (
             "R1 P1-3: `front matter` (two-word) variant must be caught"
@@ -869,7 +913,7 @@ def test_step3a_invariant_iii_front_dash_matter_variant_caught() -> None:
         nl = text.index("\n", block_pos)
         injection = "\n\nIf needed, read the entry's front-matter for the slug.\n"
         mutated = text[: nl] + injection + text[nl:]
-        target.write_text(mutated, encoding="utf-8")
+        target.write_text(mutated, encoding="utf-8", newline="")
         result = _run_lint()
         assert result.returncode == 1, (
             "R1 P1-3: `front-matter` (hyphenated) variant must be caught"
@@ -887,7 +931,7 @@ def test_step3a_invariant_iii_wrapped_read_instruction_caught() -> None:
         # A bullet that wraps the read verb away from the target.
         injection = "\n\n- read the entry's full\n  frontmatter to find the slug\n"
         mutated = text[: nl] + injection + text[nl:]
-        target.write_text(mutated, encoding="utf-8")
+        target.write_text(mutated, encoding="utf-8", newline="")
         result = _run_lint()
         assert result.returncode == 1, (
             "R1 P1-3: line-wrapped read-frontmatter instruction must be caught"
@@ -920,7 +964,7 @@ def test_step3a_duplicate_block_rejected() -> None:
             "\n## Two-Layer Citation Emission (v3.7.1)\n\n"
             "duplicate body — this should be caught\n"
         )
-        target.write_text(text + duplicate, encoding="utf-8")
+        target.write_text(text + duplicate, encoding="utf-8", newline="")
         result = _run_lint()
         assert result.returncode == 1, (
             "R1 P2: duplicate canonical Two-Layer Citation Emission heading "
@@ -951,7 +995,7 @@ def test_step3a_invariant_iii_bullet_boundary_is_clause_terminator() -> None:
             "- read the entry frontmatter to find the slug\n"
         )
         mutated = text[: nl] + injection + text[nl:]
-        target.write_text(mutated, encoding="utf-8")
+        target.write_text(mutated, encoding="utf-8", newline="")
         result = _run_lint()
         assert result.returncode == 1, (
             "R2 P1-A: bullet boundary must terminate the negation window; "
@@ -978,7 +1022,7 @@ def test_step3a_invariant_ii_finalizer_agent_substring_caught() -> None:
             "downstream.\n"
         )
         mutated = text[: nl] + injection + text[nl:]
-        target.write_text(mutated, encoding="utf-8")
+        target.write_text(mutated, encoding="utf-8", newline="")
         result = _run_lint()
         assert result.returncode == 1, (
             "R2 P1-B: `cite_provenance_finalizer_agent` must be flagged "
@@ -1000,7 +1044,7 @@ def test_step3a_invariant_ii_terminal_gate_agent_substring_caught() -> None:
             "this output before publication.\n"
         )
         mutated = text[: nl] + injection + text[nl:]
-        target.write_text(mutated, encoding="utf-8")
+        target.write_text(mutated, encoding="utf-8", newline="")
         result = _run_lint()
         assert result.returncode == 1, (
             "R2 P1-B: `cite_provenance_terminal_gate_agent` must be flagged"
@@ -1021,7 +1065,7 @@ def test_step3a_h3_same_title_duplicate_rejected() -> None:
             "\n### Two-Layer Citation Emission (v3.7.1)\n\n"
             "duplicate body — H3 typo or attack\n"
         )
-        target.write_text(text + duplicate_h3, encoding="utf-8")
+        target.write_text(text + duplicate_h3, encoding="utf-8", newline="")
         result = _run_lint()
         assert result.returncode == 1, (
             "R2 P2: H3 same-title heading must be rejected as a duplicate"
@@ -1114,7 +1158,7 @@ def test_step3a_heading_drift_with_trailing_text_rejected() -> None:
             "\n### Two-Layer Citation Emission (v3.7.1) — extended\n\n"
             "The finalizer will resolve markers.\n"
         )
-        target.write_text(text + drift_block, encoding="utf-8")
+        target.write_text(text + drift_block, encoding="utf-8", newline="")
         result = _run_lint()
         assert result.returncode == 1, (
             "R3 P1-A: heading drift `### Two-Layer ... — extended` must be "

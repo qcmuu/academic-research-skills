@@ -99,7 +99,16 @@ class VerificationCache:
         if row is None:
             return None
         response_json, ts = row
-        if self._is_expired(ts):
+        try:
+            expired = self._is_expired(ts)
+        except (TypeError, ValueError):
+            # #331 contract applied to the timestamp: a malformed
+            # verification_timestamp (hand-edited DB, clock-format drift, a row
+            # written by another tool) is a MISS, not a hard error. Raising here
+            # would abort the whole verification run on one bad row; returning
+            # None forces a clean live recompute that overwrites it.
+            return None
+        if expired:
             return None
         # #331: a corrupted payload (not decodable) or a non-dict value (e.g.
         # written by an older/other tool) is a miss, not a hard error — the
@@ -150,4 +159,10 @@ class VerificationCache:
     @staticmethod
     def _is_expired(verification_timestamp: str) -> bool:
         stored = datetime.fromisoformat(verification_timestamp)
+        if stored.tzinfo is None:
+            # A naive stamp (hand-edited / other-tool row) would raise TypeError
+            # against the aware "now" below. `put` always writes an aware UTC
+            # stamp, so reading a naive one as UTC is the closest correct
+            # interpretation and keeps a still-fresh entry usable.
+            stored = stored.replace(tzinfo=timezone.utc)
         return datetime.now(timezone.utc) - stored > timedelta(days=_TTL_DAYS)

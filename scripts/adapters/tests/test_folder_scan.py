@@ -188,12 +188,20 @@ def test_symlink_pointing_outside_input_does_not_crash(tmp_path):
     # Symlinks escaping the scanned root can disclose files the user did not
     # intend to include, so they are rejected instead of followed.
     import os
+    import pytest
     outside = tmp_path / "outside"
     outside.mkdir()
     (outside / "Smith2024_real.pdf").touch()
     inside = tmp_path / "inside"
     inside.mkdir()
-    os.symlink(outside / "Smith2024_real.pdf", inside / "Smith2024_link.pdf")
+    try:
+        os.symlink(outside / "Smith2024_real.pdf", inside / "Smith2024_link.pdf")
+    except (OSError, NotImplementedError):
+        pytest.skip(
+            "host cannot create symlinks (Windows without Developer Mode / "
+            "seCreateSymbolicLinkPrivilege), so the escape vector cannot be "
+            "constructed"
+        )
     p_out = tmp_path / "p.yaml"
     r_out = tmp_path / "r.yaml"
     r = _run("--input", str(inside), "--passport", str(p_out), "--rejection-log", str(r_out))

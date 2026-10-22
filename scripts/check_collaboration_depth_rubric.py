@@ -78,7 +78,10 @@ def _check_agent_files(root: Path) -> list[str]:
     if not agents_dir.is_dir():
         return [f"{AGENTS_DIR} does not exist"]
     errs: list[str] = []
-    rubric_path_str = str(RUBRIC_PATH)
+    # as_posix(): frontmatter declares the canonical forward-slash path, but
+    # str(Path(...)) renders backslashes on Windows, so the equality check
+    # failed on every Windows checkout for a correctly-declared rubric_ref.
+    rubric_path_str = RUBRIC_PATH.as_posix()
     for path in sorted(agents_dir.glob("*.md")):
         text = path.read_text(encoding="utf-8")
         fm, _ = split_frontmatter(text)

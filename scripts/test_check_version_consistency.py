@@ -839,9 +839,15 @@ class TestAgentCountClaim(unittest.TestCase):
             self._write_agents(root, ["alpha", "beta"])
             link_dir = root / "agents"
             link_dir.mkdir()
-            (link_dir / "alpha_agent.md").symlink_to(
-                root / "deep-research" / "agents" / "alpha_agent.md"
-            )
+            try:
+                (link_dir / "alpha_agent.md").symlink_to(
+                    root / "deep-research" / "agents" / "alpha_agent.md"
+                )
+            except (OSError, NotImplementedError):
+                self.skipTest(
+                    "host cannot create filesystem symlinks (Windows without "
+                    "Developer Mode / symlink privilege)"
+                )
             result = _run(root)
             self.assertEqual(
                 result.returncode, 0,

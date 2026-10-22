@@ -462,6 +462,37 @@ def _measure_390_sequencing_block_lines(text: str) -> int:
     return len(text[m.start():end].splitlines())
 
 
+def _measure_reflexivity_observer_block_lines(text: str) -> int:
+    """Return the number of lines in the social-science-track Stage 6
+    `### Reflexivity & Positionality Observer` H3 block.
+
+    Sibling of `### Collaboration Depth Observer`: an advisory observer
+    dispatched at the same checkpoints, carrying its own dispatch protocol,
+    profile-gated intensity rules and non-blocking guarantees. It belongs to
+    the social-science track, not to the v3.6.7 Step 6 §3.5 audit gate, so —
+    like every other post-v3.6.7 extension — it MUST be subtracted before
+    applying the v3.6.7 +60 ceiling. Without this subtraction the
+    v3.6.7-attributed count absorbs the observer prose and the budget test
+    reports a phantom overrun.
+
+    Returns 0 if the heading is absent (branch without the social-science
+    track).
+    """
+    import re as _re
+    anchor = _re.compile(
+        r"(?m)^[ \t]*###[ \t]+Reflexivity & Positionality Observer[^\n]*$"
+    )
+    m = anchor.search(text)
+    if m is None:
+        return 0
+    next_h = _re.compile(r"(?m)^[ \t]*#{1,3}[ \t]+")
+    head_eol = text.find("\n", m.end())
+    search_start = (head_eol + 1) if head_eol >= 0 else len(text)
+    nm = next_h.search(text, search_start)
+    end = nm.start() if nm else len(text)
+    return len(text[m.start():end].splitlines())
+
+
 def _measure_394_gate_block_lines(text: str) -> int:
     """Return the number of lines in the #394 slice-4 submission-package
     gate subsection (`## Submission-Package Terminal Gate ...` H2 block).
@@ -520,14 +551,17 @@ class Phase66LineBudgetTest(unittest.TestCase):
         v3_10_lines = _measure_v3_10_extension_block_lines(text)
         gate_394_lines = _measure_394_gate_block_lines(text)
         seq_390_lines = _measure_390_sequencing_block_lines(text)
+        reflexivity_lines = _measure_reflexivity_observer_block_lines(text)
         # v3.6.7-only line count: total minus v3.7.1 Step 3b, v3.7.3
         # finalizer extension, v3.8 §3.6 audit-gate, v3.9.0 triangulation
         # extension, v3.10 terminal-policy extension, the #394 slice-4
-        # submission-package gate, AND the #390 Slice B revision-patch
-        # sequencing subsections (each has its own dedicated budget test).
+        # submission-package gate, the #390 Slice B revision-patch
+        # sequencing subsection, AND the social-science-track Reflexivity
+        # observer block (each has its own scope).
         v367_line_count = (
             total_lines - step_3b_lines - v3_7_3_lines - v3_8_lines
             - v3_9_0_lines - v3_10_lines - gate_394_lines - seq_390_lines
+            - reflexivity_lines
         )
         ceiling = BASELINE_LINE_COUNT + LINE_BUDGET_OVER_BASELINE
         self.assertLessEqual(
@@ -542,8 +576,10 @@ class Phase66LineBudgetTest(unittest.TestCase):
             f"the v3.9.0 triangulation extension subsection, "
             f"{v3_10_lines} are in the v3.10 terminal-policy extension "
             f"subsection, {gate_394_lines} are in the #394 submission-"
-            f"package gate, and {seq_390_lines} are in the #390 revision-"
-            f"patch sequencing subsection; v3.6.7-attributed lines = "
+            f"package gate, {seq_390_lines} are in the #390 revision-"
+            f"patch sequencing subsection, and {reflexivity_lines} are in "
+            f"the social-science Reflexivity observer block; "
+            f"v3.6.7-attributed lines = "
             f"{v367_line_count} exceeds {ceiling} (baseline "
             f"{BASELINE_LINE_COUNT} + Phase 6.6 budget "
             f"{LINE_BUDGET_OVER_BASELINE}). Tighten the §3.5 Audit "
